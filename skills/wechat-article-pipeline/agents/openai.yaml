@@ -1,0 +1,4 @@
+interface:
+  display_name: "微信公众号文章流水线"
+  short_description: "Rewrite viral title digest cover upload and format WeChat articles"
+  default_prompt: "Use $wechat-article-pipeline to rewrite this article, design a high-click WeChat title and digest, generate article images and a WeChat cover, upload images, replace image links, archive it, and generate a copy-ready WeChat HTML."
