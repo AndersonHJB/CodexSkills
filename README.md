@@ -42,6 +42,45 @@ git clone https://github.com/AndersonHJB/CodexSkills.git
 cd CodexSkills
 ```
 
+## 让 Codex 自动安装
+
+如果你正在使用 Codex，也可以不手动敲命令，直接把下面的提示词发给 Codex，让它帮你安装。
+
+### 让 Codex 单独安装一个 Skill
+
+把这段发给 Codex：
+
+```text
+请帮我从 https://github.com/AndersonHJB/CodexSkills 安装 wechat-article-pipeline 这个 Codex Skill。
+要求：
+1. 克隆或更新这个仓库。
+2. 将 skills/wechat-article-pipeline/ 复制到 ~/.codex/skills/wechat-article-pipeline/。
+3. 如果本地已存在同名 Skill，请先告诉我会覆盖哪些文件，再执行覆盖。
+4. 安装后检查 ~/.codex/skills/wechat-article-pipeline/SKILL.md 是否存在。
+5. 最后告诉我是否需要重启 Codex 或新建会话。
+```
+
+### 让 Codex 批量安装全部 Skills
+
+把这段发给 Codex：
+
+```text
+请帮我从 https://github.com/AndersonHJB/CodexSkills 批量安装全部 Codex Skills。
+要求：
+1. 克隆或更新这个仓库。
+2. 遍历仓库里的 skills/*/ 目录。
+3. 将每个 Skill 分别复制到 ~/.codex/skills/<skill-name>/。
+4. 如果本地已有同名 Skill，请先列出将被覆盖的 Skill 名称，再执行覆盖。
+5. 安装后列出 ~/.codex/skills 下已经安装的 Skills。
+6. 最后提醒我重启 Codex 或新建会话，让 Skills 生效。
+```
+
+如果你希望 Codex 直接覆盖本地同名 Skill，也可以在提示词里加一句：
+
+```text
+允许直接覆盖本地同名 Skill，不需要逐个确认。
+```
+
 ## 单独安装一个 Skill
 
 以 `wechat-article-pipeline` 为例：
