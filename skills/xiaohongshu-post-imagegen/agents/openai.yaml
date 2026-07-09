@@ -1,0 +1,4 @@
+interface:
+  display_name: "小红书帖子图生成"
+  short_description: "按主题生成小红书多图、统一文案和标签"
+  default_prompt: "Use $xiaohongshu-post-imagegen to generate a Xiaohongshu carousel from this theme: AI悦创长期招收编程、AI、Codex一对一教学。"

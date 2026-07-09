@@ -11,6 +11,7 @@ https://github.com/AndersonHJB/CodexSkills
 ## Skills 列表
 
 - `wechat-article-pipeline`：微信公众号文章流水线，支持文章重写、吸金标题与摘要、教程插图、公众号封面、图片上传 PicGoImage、Markdown 图片链接替换、文章归档、公众号可复制 HTML 排版。
+- `xiaohongshu-post-imagegen`：小红书帖子图生成工作流，支持按主题生成多张轮播插图、图片内中文文案、整帖统一发布文案、标题备选、互动引导和标签组合。
 
 ## 目录结构
 
@@ -60,6 +61,12 @@ cd CodexSkills
 5. 最后告诉我是否需要重启 Codex 或新建会话。
 ```
 
+安装小红书帖子图生成 Skill 时，把 Skill 名称换成：
+
+```text
+xiaohongshu-post-imagegen
+```
+
 ### 让 Codex 批量安装全部 Skills
 
 把这段发给 Codex：
@@ -88,6 +95,13 @@ cd CodexSkills
 ```bash
 mkdir -p ~/.codex/skills/wechat-article-pipeline
 rsync -a skills/wechat-article-pipeline/ ~/.codex/skills/wechat-article-pipeline/
+```
+
+安装 `xiaohongshu-post-imagegen`：
+
+```bash
+mkdir -p ~/.codex/skills/xiaohongshu-post-imagegen
+rsync -a skills/xiaohongshu-post-imagegen/ ~/.codex/skills/xiaohongshu-post-imagegen/
 ```
 
 安装后，重启 Codex 或新建一个会话，让 Skill 列表重新加载。
@@ -136,12 +150,14 @@ done
 ```bash
 ls ~/.codex/skills
 ls ~/.codex/skills/wechat-article-pipeline
+ls ~/.codex/skills/xiaohongshu-post-imagegen
 ```
 
 也可以检查 Skill 文件是否存在：
 
 ```bash
 test -f ~/.codex/skills/wechat-article-pipeline/SKILL.md && echo "installed"
+test -f ~/.codex/skills/xiaohongshu-post-imagegen/SKILL.md && echo "installed"
 ```
 
 在 Codex 中新建会话后，如果任务匹配 Skill 的描述，Codex 会自动使用对应 Skill。
@@ -150,6 +166,12 @@ test -f ~/.codex/skills/wechat-article-pipeline/SKILL.md && echo "installed"
 
 ```bash
 rm -rf ~/.codex/skills/wechat-article-pipeline
+```
+
+卸载 `xiaohongshu-post-imagegen`：
+
+```bash
+rm -rf ~/.codex/skills/xiaohongshu-post-imagegen
 ```
 
 卸载后重启 Codex 或新建会话。
