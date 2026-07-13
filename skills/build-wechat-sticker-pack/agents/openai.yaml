@@ -1,0 +1,4 @@
+interface:
+  display_name: "微信表情包全流程生成"
+  short_description: "从参考图片生成20张独立表情、发布素材、原图归档与提交压缩包"
+  default_prompt: "使用 $build-wechat-sticker-pack 根据这张参考图片生成完整的20张微信表情及发布提交包。"

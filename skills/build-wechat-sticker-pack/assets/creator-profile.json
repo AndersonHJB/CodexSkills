@@ -1,0 +1,14 @@
+{
+  "schema_version": 1,
+  "copyright_holder": "",
+  "default_download_region": "全球",
+  "default_price": "免费",
+  "default_category": "卡通表情/其他",
+  "default_styles": [
+    "日常",
+    "软萌可爱"
+  ],
+  "default_theme": "万能通用",
+  "rights_policy": "Set rights_confirmed and portrait_use_confirmed explicitly per run. A privately supplied self-reference may be treated as the user's attestation only when there is no contrary information.",
+  "note": "Public template. Set copyright_holder to the real submitter before first use. Override or ask when a reference is third-party, public, branded, downloaded, or depicts another person."
+}

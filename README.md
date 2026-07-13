@@ -12,6 +12,49 @@ https://github.com/AndersonHJB/CodexSkills
 
 - `wechat-article-pipeline`：微信公众号文章流水线，支持文章重写、吸金标题与摘要、教程插图、公众号封面、图片上传 PicGoImage、Markdown 图片链接替换、文章归档、公众号可复制 HTML 排版。
 - `xiaohongshu-post-imagegen`：小红书帖子图生成工作流，支持按主题生成多张轮播插图、图片内中文文案、整帖统一发布文案、标题备选、互动引导和标签组合。
+- `build-wechat-sticker-pack`：从一张或多张参考图片，全流程生成 20 张独立 Q 版微信表情、发布横幅/封面/聊天图标、填写文案、含义词、QA 报告、原图归档及双压缩包。
+
+## 微信表情包全流程 Skill
+
+`build-wechat-sticker-pack` 适合希望“只提供参考图片，其余交给 Codex”的场景。每次固定生成 20 张独立表情，但文案、动作、表情与道具会结合当前人物和主题动态规划，不会机械复用一套内容。
+
+主要能力：
+
+- 原始参考图片逐字节保留，保留原文件名、扩展名、EXIF，并写入 SHA-256；
+- 先生成无字角色锚点，再通过 20 次独立图片生成保持人物一致性；
+- 图片生成阶段不直接生成中文，最终文字由本地确定性排版，降低错字风险；
+- 输出 20 张 `240×240` 独立表情，以及微信发布所需横幅、透明封面和聊天图标；
+- 自动生成名称、介绍、版权、20 个含义词、AI/版权声明和可直接填写的发布材料；
+- 严格检查数量、尺寸、大小、透明度、重复图、文字、来源哈希、人工复核与版权门禁；
+- 同时生成仅供上传的 submission ZIP，以及包含原图、源图、提示词、生成账本和 QA 的 full archive ZIP。
+
+安装后，在新的 Codex 会话中上传参考图片并发送：
+
+```text
+使用 $build-wechat-sticker-pack，根据这张参考图片生成完整的20张微信表情及发布提交包。
+```
+
+首次使用前，请把 `~/.codex/skills/build-wechat-sticker-pack/assets/creator-profile.json` 中的 `copyright_holder` 改成真实提交者或版权方名称。公开模板不会预填他人的版权身份；设置一次后，后续自有素材通常只需提供参考图片。
+
+也可以附加风格或主题要求：
+
+```text
+使用 $build-wechat-sticker-pack，根据这些参考图片制作一套校园日常主题的20张微信表情，整体软萌、白色背景，并生成完整发布材料。
+```
+
+正常完成后会得到：
+
+```text
+00-reference-originals/       原图无损归档与哈希
+01-plan/                      20张内容计划、人物/风格设定、冻结提示词
+02-source-assets/             角色锚点、20张高分源图、发布素材、生成账本
+03-submission/                可提交表情、发布图片、填写材料、QA
+04-preview/                   内部审阅总览图
+archives/*-submission.zip     仅上传材料
+archives/*-full-archive.zip   原图与完整生产资料
+```
+
+注意：full archive 会保留原始图片字节，因此可能保留 EXIF/GPS；公开提交或分享时优先使用 submission ZIP。真人、第三方图片、品牌角色或版权不明素材会触发授权确认，未确认时只生成明确标记的草稿存档，不生成可提交 ZIP。
 
 ## 目录结构
 
@@ -22,6 +65,7 @@ CodexSkills/
     └── <skill-name>/
         ├── SKILL.md
         ├── agents/
+        ├── assets/
         ├── references/
         └── scripts/
 ```
@@ -67,6 +111,8 @@ cd CodexSkills
 xiaohongshu-post-imagegen
 ```
 
+安装微信表情包 Skill 时，把上面的 `wechat-article-pipeline` 替换为 `build-wechat-sticker-pack` 即可。
+
 ### 让 Codex 批量安装全部 Skills
 
 把这段发给 Codex：
@@ -102,6 +148,13 @@ rsync -a skills/wechat-article-pipeline/ ~/.codex/skills/wechat-article-pipeline
 ```bash
 mkdir -p ~/.codex/skills/xiaohongshu-post-imagegen
 rsync -a skills/xiaohongshu-post-imagegen/ ~/.codex/skills/xiaohongshu-post-imagegen/
+```
+
+安装微信表情包 Skill：
+
+```bash
+mkdir -p ~/.codex/skills/build-wechat-sticker-pack
+rsync -a skills/build-wechat-sticker-pack/ ~/.codex/skills/build-wechat-sticker-pack/
 ```
 
 安装后，重启 Codex 或新建一个会话，让 Skill 列表重新加载。
@@ -151,6 +204,7 @@ done
 ls ~/.codex/skills
 ls ~/.codex/skills/wechat-article-pipeline
 ls ~/.codex/skills/xiaohongshu-post-imagegen
+ls ~/.codex/skills/build-wechat-sticker-pack
 ```
 
 也可以检查 Skill 文件是否存在：
@@ -158,6 +212,7 @@ ls ~/.codex/skills/xiaohongshu-post-imagegen
 ```bash
 test -f ~/.codex/skills/wechat-article-pipeline/SKILL.md && echo "installed"
 test -f ~/.codex/skills/xiaohongshu-post-imagegen/SKILL.md && echo "installed"
+test -f ~/.codex/skills/build-wechat-sticker-pack/SKILL.md && echo "installed"
 ```
 
 在 Codex 中新建会话后，如果任务匹配 Skill 的描述，Codex 会自动使用对应 Skill。
@@ -172,6 +227,12 @@ rm -rf ~/.codex/skills/wechat-article-pipeline
 
 ```bash
 rm -rf ~/.codex/skills/xiaohongshu-post-imagegen
+```
+
+卸载 `build-wechat-sticker-pack`：
+
+```bash
+rm -rf ~/.codex/skills/build-wechat-sticker-pack
 ```
 
 卸载后重启 Codex 或新建会话。
