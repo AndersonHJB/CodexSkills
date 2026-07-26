@@ -12,7 +12,33 @@ https://github.com/AndersonHJB/CodexSkills
 
 - `wechat-article-pipeline`：微信公众号文章流水线，支持文章重写、吸金标题与摘要、教程插图、公众号封面、图片上传 PicGoImage、Markdown 图片链接替换、文章归档、公众号可复制 HTML 排版。
 - `xiaohongshu-post-imagegen`：小红书帖子图生成工作流，支持按主题生成多张轮播插图、图片内中文文案、整帖统一发布文案、标题备选、互动引导和标签组合。
+- `wechat-chat-to-xiaohongshu`：微信聊天截图转小红书工作流，支持截图排序、OCR、证据核对、严格匿名化、1080×1440 轮播排版、标题正文标签和隐私质检。
 - `build-wechat-sticker-pack`：从一张或多张参考图片，全流程生成 20 张独立 Q 版微信表情、发布横幅/封面/聊天图标、填写文案、含义词、QA 报告、原图归档及双压缩包。
+
+## 微信聊天截图转小红书 Skill
+
+`wechat-chat-to-xiaohongshu` 适合把私教沟通、客户咨询、课程规划等微信聊天截图整理成可发布的小红书帖子。默认保留真实截图作为证据主体，不让图片模型重绘聊天文字。
+
+主要能力：
+
+- 自动盘点截图并结合时间、文件名和对话连续性重建顺序；
+- 使用 macOS Vision OCR 建立可检索文本，同时要求逐图核对；
+- 建立证据台账，区分双方表述、已核实事实、编辑推断和不可发布内容；
+- 默认隐藏昵称、头像、账号、电话、链接、二维码、交易与排课信息；
+- 确定性生成 1080×1440 轮播图、总览图、标题、统一正文、标签和图片顺序；
+- 最终 OCR 扫描隐私屏蔽词，并生成可审计的质检报告；
+- 保持原始素材目录和文件字节不变。
+
+安装后，给出包含原始微信截图的文件夹路径并发送：
+
+```text
+使用 $wechat-chat-to-xiaohongshu，把这个微信聊天截图文件夹做成可发布的小红书帖子：
+/绝对路径/聊天截图文件夹
+
+请自动完成聊天排序、OCR、隐私脱敏、轮播设计与生成，并提供标题、整帖文案、标签、图片顺序和质检报告。
+```
+
+只有 Finder 文件列表截图无法读取聊天内容，需要提供实际截图文件或文件夹路径。
 
 ## 微信表情包全流程 Skill
 
@@ -111,6 +137,12 @@ cd CodexSkills
 xiaohongshu-post-imagegen
 ```
 
+安装微信聊天截图转小红书 Skill 时，把 Skill 名称换成：
+
+```text
+wechat-chat-to-xiaohongshu
+```
+
 安装微信表情包 Skill 时，把上面的 `wechat-article-pipeline` 替换为 `build-wechat-sticker-pack` 即可。
 
 ### 让 Codex 批量安装全部 Skills
@@ -148,6 +180,13 @@ rsync -a skills/wechat-article-pipeline/ ~/.codex/skills/wechat-article-pipeline
 ```bash
 mkdir -p ~/.codex/skills/xiaohongshu-post-imagegen
 rsync -a skills/xiaohongshu-post-imagegen/ ~/.codex/skills/xiaohongshu-post-imagegen/
+```
+
+安装 `wechat-chat-to-xiaohongshu`：
+
+```bash
+mkdir -p ~/.codex/skills/wechat-chat-to-xiaohongshu
+rsync -a skills/wechat-chat-to-xiaohongshu/ ~/.codex/skills/wechat-chat-to-xiaohongshu/
 ```
 
 安装微信表情包 Skill：
@@ -204,6 +243,7 @@ done
 ls ~/.codex/skills
 ls ~/.codex/skills/wechat-article-pipeline
 ls ~/.codex/skills/xiaohongshu-post-imagegen
+ls ~/.codex/skills/wechat-chat-to-xiaohongshu
 ls ~/.codex/skills/build-wechat-sticker-pack
 ```
 
@@ -212,6 +252,7 @@ ls ~/.codex/skills/build-wechat-sticker-pack
 ```bash
 test -f ~/.codex/skills/wechat-article-pipeline/SKILL.md && echo "installed"
 test -f ~/.codex/skills/xiaohongshu-post-imagegen/SKILL.md && echo "installed"
+test -f ~/.codex/skills/wechat-chat-to-xiaohongshu/SKILL.md && echo "installed"
 test -f ~/.codex/skills/build-wechat-sticker-pack/SKILL.md && echo "installed"
 ```
 
@@ -227,6 +268,12 @@ rm -rf ~/.codex/skills/wechat-article-pipeline
 
 ```bash
 rm -rf ~/.codex/skills/xiaohongshu-post-imagegen
+```
+
+卸载 `wechat-chat-to-xiaohongshu`：
+
+```bash
+rm -rf ~/.codex/skills/wechat-chat-to-xiaohongshu
 ```
 
 卸载 `build-wechat-sticker-pack`：

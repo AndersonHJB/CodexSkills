@@ -1,6 +1,6 @@
 ---
 name: xiaohongshu-post-imagegen
-description: Generate Xiaohongshu carousel post images and publishing copy from a short Chinese topic. Use when the user asks to create 小红书帖子插图, 小红书轮播图, social media education/marketing images, multi-image posts with in-image Chinese copy, or wants to provide only a theme and receive generated images plus a unified whole-post caption, title options, per-slide notes, tags, and saved deliverables.
+description: Generate Xiaohongshu carousel post images and publishing copy from a short Chinese topic. Use when the user asks to create 小红书帖子插图, 小红书轮播图, social media education/marketing images, multi-image posts with in-image Chinese copy, or wants to provide only a theme and receive generated images plus a unified whole-post caption, title options, per-slide notes, tags, and saved deliverables. Do not use for a folder of WeChat chat screenshots that must be ordered, preserved, and anonymized; use wechat-chat-to-xiaohongshu instead.
 ---
 
 # Xiaohongshu Post Imagegen
@@ -8,6 +8,8 @@ description: Generate Xiaohongshu carousel post images and publishing copy from 
 ## Overview
 
 Turn a short topic into a ready-to-post Xiaohongshu carousel: multiple vertical images with Chinese copy rendered inside the images, title options, one unified whole-post caption that matches the image set, per-slide notes, and tags.
+
+If the primary input is a WeChat screenshot folder, stop and route the task to `wechat-chat-to-xiaohongshu`. Keep this skill for topic-first, fully generated carousels.
 
 This skill is normally used together with the built-in `imagegen` skill/tool. If the task involves generating raster images, follow the imagegen skill rules and use built-in `image_gen` by default.
 

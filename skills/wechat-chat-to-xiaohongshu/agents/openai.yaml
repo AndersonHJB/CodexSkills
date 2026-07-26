@@ -1,0 +1,4 @@
+interface:
+  display_name: "微信聊天转小红书"
+  short_description: "从微信聊天截图自动生成匿名化小红书轮播图、标题文案与标签"
+  default_prompt: "使用 $wechat-chat-to-xiaohongshu 将这个微信聊天截图文件夹制作成可发布的小红书轮播图、标题、正文和标签。"
