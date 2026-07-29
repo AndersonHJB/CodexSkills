@@ -14,6 +14,7 @@ https://github.com/AndersonHJB/CodexSkills
 - `xiaohongshu-post-imagegen`：小红书帖子图生成工作流，支持按主题生成多张轮播插图、图片内中文文案、整帖统一发布文案、标题备选、互动引导和标签组合。
 - `wechat-chat-to-xiaohongshu`：微信聊天截图转小红书工作流，支持截图排序、OCR、证据核对、严格匿名化、1080×1440 轮播排版、标题正文标签和隐私质检。
 - `build-wechat-sticker-pack`：从一张或多张参考图片，全流程生成 20 张独立 Q 版微信表情、发布横幅/封面/聊天图标、填写文案、含义词、QA 报告、原图归档及双压缩包。
+- `cola-voice-delivery`：使用 ListenHub 将文本或播客转成晓曼与 Cola 两种中文女生声，按输入长度动态分段，交付每个片段和两种音声的完整拼接 MP3。
 
 ## 微信聊天截图转小红书 Skill
 
@@ -82,6 +83,32 @@ archives/*-full-archive.zip   原图与完整生产资料
 
 注意：full archive 会保留原始图片字节，因此可能保留 EXIF/GPS；公开提交或分享时优先使用 submission ZIP。真人、第三方图片、品牌角色或版权不明素材会触发授权确认，未确认时只生成明确标记的草稿存档，不生成可提交 ZIP。
 
+## Cola 双音声长文朗读 Skill
+
+`cola-voice-delivery` 适合把一份文本、文本文件或播客内容直接生成两套中文朗读音频。调用 Skill 并提供内容即可，Skill 会自行读取、转写（播客音频时）、动态分段、生成、下载、拼接和核查，不要求手动拆分或合并。
+
+固定使用两个 ListenHub 音色：
+
+- 晓曼：`chat-girl-105-cn`
+- Cola：`chatb812x-500306f5`
+
+它会根据文本长度和章节边界动态决定片段数量，不假设固定 11 段。每个音色都会交付：
+
+- 全部有序 MP3 片段；
+- 一个独立命名的完整拼接 MP3；
+- 生成状态、下载结果、音频时长和文件大小核查。
+
+简单调用：
+
+```text
+使用 $cola-voice-delivery，把这个文本生成完整音频：
+/绝对路径/播客稿.txt
+
+请交付晓曼和 Cola 两个音声的全部片段，以及各自的完整拼接音频。
+```
+
+也可以直接附带文本内容。长文本会按章节或自然段动态拆分；如果 ListenHub 的输入接口要求 HTML，Skill 会准备 HTML 备用输入，失败时回退到逐段直接文本生成。
+
 ## 目录结构
 
 ```text
@@ -145,6 +172,12 @@ wechat-chat-to-xiaohongshu
 
 安装微信表情包 Skill 时，把上面的 `wechat-article-pipeline` 替换为 `build-wechat-sticker-pack` 即可。
 
+安装 Cola 双音声长文朗读 Skill 时，把上面的 Skill 名称替换为：
+
+```text
+cola-voice-delivery
+```
+
 ### 让 Codex 批量安装全部 Skills
 
 把这段发给 Codex：
@@ -194,6 +227,13 @@ rsync -a skills/wechat-chat-to-xiaohongshu/ ~/.codex/skills/wechat-chat-to-xiaoh
 ```bash
 mkdir -p ~/.codex/skills/build-wechat-sticker-pack
 rsync -a skills/build-wechat-sticker-pack/ ~/.codex/skills/build-wechat-sticker-pack/
+```
+
+安装 Cola 双音声长文朗读 Skill：
+
+```bash
+mkdir -p ~/.codex/skills/cola-voice-delivery
+rsync -a skills/cola-voice-delivery/ ~/.codex/skills/cola-voice-delivery/
 ```
 
 安装后，重启 Codex 或新建一个会话，让 Skill 列表重新加载。
