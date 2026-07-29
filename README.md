@@ -140,6 +140,20 @@ git clone https://github.com/AndersonHJB/CodexSkills.git
 cd CodexSkills
 ```
 
+## 直接安装 Cola Skill
+
+macOS 或 Linux 用户可以直接复制下面的命令。它会克隆或更新仓库，只安装 `cola-voice-delivery`，不会覆盖其他 Skill：
+
+```bash
+repo_dir="${TMPDIR:-/tmp}/CodexSkills"
+if [ -d "$repo_dir/.git" ]; then git -C "$repo_dir" pull --ff-only; else git clone https://github.com/AndersonHJB/CodexSkills.git "$repo_dir"; fi
+mkdir -p "$HOME/.codex/skills/cola-voice-delivery"
+rsync -a "$repo_dir/skills/cola-voice-delivery/" "$HOME/.codex/skills/cola-voice-delivery/"
+test -f "$HOME/.codex/skills/cola-voice-delivery/SKILL.md" && echo "cola-voice-delivery installed"
+```
+
+安装完成后，重启 Codex 或新建一个会话，让 Skill 列表重新加载。
+
 ## 让 Codex 自动安装
 
 如果你正在使用 Codex，也可以不手动敲命令，直接把下面的提示词发给 Codex，让它帮你安装。
@@ -176,6 +190,14 @@ wechat-chat-to-xiaohongshu
 
 ```text
 cola-voice-delivery
+```
+
+也可以直接发送：
+
+```text
+请从 https://github.com/AndersonHJB/CodexSkills 安装 cola-voice-delivery。
+只安装这个 Skill，不要影响 ~/.codex/skills 下的其他 Skill。
+安装后检查 ~/.codex/skills/cola-voice-delivery/SKILL.md 是否存在，并提醒我新建会话使它生效。
 ```
 
 ### 让 Codex 批量安装全部 Skills
