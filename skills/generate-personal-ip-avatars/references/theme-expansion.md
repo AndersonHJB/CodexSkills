@@ -6,9 +6,25 @@ Read this file completely for full or expansion mode. The objective is 64 genuin
 
 Before planning additions, record the classic eight paths and hashes. Never edit, overwrite, rename, recompress, or regenerate them during expansion. Exclude their core actions and props from the new concept matrix.
 
-## Design eight theme systems
+## Draw eight blind-box theme systems
 
-Discover palettes from the user's visible presentation, the emotional range useful for their IP, and color harmony. Do not assume the colors in the style reference are the user's personal colors. When the user gives no preference, choose a deliberately broad set of eight visual moods.
+Every person must receive a fresh blind-box draw. Do not reuse a fixed list of eight named themes, copy the previous user's themes, or make the draw deterministic from identity traits. Run:
+
+```bash
+python3 scripts/draw_theme_seed.py --count 8
+```
+
+If the user names preferred colors or palettes, append each request without changing the random count:
+
+```bash
+python3 scripts/draw_theme_seed.py --count 8 \
+  --user-theme "用户主题一" \
+  --user-theme "用户主题二"
+```
+
+Run it exactly once per collection. Record its numeric seed and complete JSON output in `PROMPTS.md` so the draw is auditable and reproducible. A rerun is allowed only after a technical failure before generation; reuse the recorded seed with `--seed` rather than opening a new blind box.
+
+Resolve the draw into palettes using color harmony and the user's visible presentation only as an identity compatibility check. Do not assume the colors in the style reference are the user's personal colors. User themes are additional rows after the random eight; they never replace or recolor the random rows. Treat a deliberately grouped request such as “蓝粉渐变感” as one theme, and separately listed requests as separate themes.
 
 Each theme must define four roles:
 
@@ -25,11 +41,11 @@ Requirements:
 - Use flat pigment-like color. Avoid gradients, glow effects, realistic light, metallic rendering, and polished vector fills.
 - Keep the white cutout silhouette and handmade medium as the cross-theme visual glue.
 
-If no stronger user-specific direction emerges, useful starting territories include forest mint, coral sunset, ocean cyan, lavender night, terracotta atelier, neon city, ink and crimson, and citrus sky. Adapt or replace these; they are not mandatory presets.
+The script's palette values are starting anchors. Refine contrast if needed while preserving the sampled hue family, mood, value direction, and harmony. Theme names should be freshly coined from the sampled mood and setting rather than selected from a fixed preset list.
 
 ## Build the 8 × 8 concept matrix
 
-Plan all 64 cells before generating. Every row is one palette theme; every row contains eight different actions and eight different signature props. Across the entire matrix, avoid repeating the same core action-prop pair.
+Plan all cells before generating. The default has 64 random-theme cells; append eight cells for every user-requested theme. Every row is one palette theme; every row contains eight different actions and eight different signature props. Across the entire matrix, avoid repeating the same core action-prop pair.
 
 For each cell specify:
 
@@ -78,9 +94,10 @@ Use stable, sortable names:
 
 ```text
 00-classic/01-...png ... 08-...png
-01-<theme>/01-...png ... 08-...png
+01-<random-theme>/01-...png ... 08-...png
 ...
-08-<theme>/01-...png ... 08-...png
+08-<random-theme>/01-...png ... 08-...png
+09-<user-theme>/01-...png ... 08-...png
 ```
 
 In expansion mode, keep the approved classic directory where it is and begin the new sibling collection at `01-<theme>`.
@@ -90,8 +107,10 @@ Record in `PROMPTS.md`:
 - identity DNA and presentation guardrails
 - style lock
 - mode and immutable baseline location
+- random seed and raw blind-box JSON draw
 - palette names, role colors, and rationale
-- the complete 64-cell concept matrix
+- which themes were appended from the user's request
+- the complete concept matrix
 
 Record in `QA.md`:
 
@@ -100,3 +119,4 @@ Record in `QA.md`:
 - unique-hash check
 - classic baseline hashes before and after expansion
 - any regenerated cells and targeted corrections
+- all-images collage count and input list
