@@ -1,117 +1,68 @@
 ---
 name: generate-personal-ip-avatars
-description: "Design a gender-adaptive personal-IP cartoon collection from one user-provided portrait for people with no art or design background. Supports a quick classic set of 8 images or a blind-box collection with one immutable classic set, eight randomly drawn color themes, and any user-requested color themes appended on top; every theme contains eight distinct hairstyles, actions, outfits, and signature accessories. Use for personal IP, cartoon identity, avatar series, character packs, randomized multi-palette exploration, or expansion of an existing approved 8-image set."
+description: "Design a gender-adaptive personal-IP cartoon system from one portrait for users with no art background. Provides independently switchable modules for classic and random color themes, eight action designs, a front-facing full-body character, eight-angle turnaround portraits, a comprehensive 24-emotion pack, user-requested color themes, per-series collages, and one all-images collage. All features default on. Use for personal IP, cartoon identity, character sheets, expression packs, turnarounds, avatar blind boxes, or expansion of an approved character set."
 ---
 
 # Generate Personal IP Avatars
 
-Create a coherent, recognizable character system from one portrait without making it photorealistic. Offer three modes:
+Build a recognizable, non-photorealistic IP character system from one portrait. All modules default on, but the user may enable or disable each module in the opening request.
 
-- **Quick mode:** one classic series of eight separate square images.
-- **Blind-box full mode:** the classic eight plus eight randomly drawn color-theme series of eight images each, for 72 images by default.
-- **Expansion mode:** when an approved classic eight already exists, treat it as immutable and generate only the 64 random-theme additions by default. Never overwrite or silently revise the approved eight.
+With defaults, generate nine series: one classic plus eight blind-box random themes. Each series contains 41 originals:
 
-If the user names preferred colors or palettes, append one eight-image series per requested theme after the eight random themes. Do not replace, reduce, or bias the random eight. The total becomes `72 + 8 × requested-theme-count` in full mode.
+- 8 action/accessory designs
+- 1 front-facing full-body hero image
+- 8 angle views
+- 24 comprehensive emotions
 
-## Required input
+Default total: `9 × 41 = 369` originals. Each user-requested color theme appends another 41 originals.
 
-Require exactly one clear user reference photo showing the face. Accept additional photos when offered, but do not require them.
+## Required reading and input
 
-If the photo exists only as a local path, inspect it with `view_image` before generation. Also inspect both bundled style assets before the first generation call:
+Read `references/feature-switches.md` completely at the start of every task. Read `references/prompt-set.md` whenever the classic series is enabled; use its eight concepts only when classic action designs are enabled. Read `references/theme-expansion.md` whenever random or user themes are enabled.
 
-- `assets/style-reference.png`: original visual-language reference
-- `assets/series-anchor.png`: approved adaptation used only as a medium and composition anchor
+Require one clear user reference photo showing the face. Accept additional photos when offered. If a local path is supplied, inspect it with `view_image`. Inspect both bundled visual-language assets before generation:
 
-Resolve asset paths relative to this `SKILL.md`.
+- `assets/style-reference.png`
+- `assets/series-anchor.png`
+
+The user photo is the sole identity and presentation source. Bundled assets provide only the handmade crayon/cut-paper visual language.
 
 ## Workflow
 
-1. Extract a short identity DNA description from the user photo:
-   - face and jaw shape
-   - hair length, texture, fringe, and side treatment
-   - brows, eye shape, nose, and mouth
-   - apparent age range and visible presentation cues, without asserting gender identity
-   - build, posture, and any real signature clothing or accessory
-2. Separate identity, visual style, and palette:
-   - Take identity only from the user photo.
-   - Take crayon texture, naive proportions, white cutout silhouette, simple facial construction, and doodle density from the bundled assets.
-   - Treat the bundled yellow/cobalt palette as the classic baseline only. It is not evidence of the user's favorite color or permanent brand palette.
-3. Infer presentation and accessory guardrails from visible evidence, not stereotypes. Do not claim certainty about gender, require disclosure, or let a bundled reference determine presentation.
-4. Route styling adaptively:
-   - Preserve or thoughtfully vary a source-supported signature accessory or presentation cue.
-   - Describe masculine-leaning, feminine-leaning, androgynous, nonbinary, or ambiguous presentation only through visible drawing cues.
-   - If evidence is ambiguous, write `presentation-neutral` and use neutral accessories such as glasses, cap, notebook, headphones, watch, camera, mug, or crossbody bag.
-   - Never transfer a bow, tie, ribbon, curls, glasses, jewelry, facial hair, or other identity-specific trait from a bundled style asset unless visible in the user's photo or explicitly requested.
-   - Preserve source hair length and texture. A cap, pose, or concept must not silently shorten long hair or lengthen short hair.
-5. Choose the mode from the request:
-   - Use quick mode only when the user explicitly asks for eight images or one compact set.
-   - Use blind-box full mode for a complete pack, multiple themes, broad color exploration, or an unspecified request to batch-design a reusable IP collection.
-   - Use expansion mode when the user supplies or identifies an existing approved eight-image set.
-6. For the classic series, read `references/prompt-set.md` completely. Substitute the identity DNA and presentation guardrails into its common prompt and eight concepts.
-7. For blind-box full or expansion mode, read `references/theme-expansion.md` completely. Run `scripts/draw_theme_seed.py` once to draw eight random theme seeds. If the user supplied preferred colors, pass each as `--user-theme`; they are appended after the random eight. Record the returned seed and plan in `PROMPTS.md` before generation.
-8. Resolve every random seed into a distinct four-role palette and plan the full action/prop matrix. The default matrix contains 64 expansion cells; add eight cells per user theme.
-9. Use the built-in image-generation tool. Pass the user photo plus both bundled style assets as references. Issue one independent call per concept; never request a grid as a substitute for separate assets.
-10. Generate in batches of four when parallel calls are supported. Keep the user informed between batches.
-11. Validate every image against the checklist below. Regenerate only failed concepts with a targeted correction.
-12. Save non-destructively:
-    - Quick mode: `output/personal-ip-avatars/` or the next versioned sibling.
-    - Blind-box full mode: `00-classic/` followed by eight random theme directories, then any user-theme directories.
-    - Expansion mode: preserve the existing classic directory and write the `64 + 8N` additions to a new sibling directory.
-13. Create one `00-overview.png` per eight-image series with `scripts/make_contact_sheet.sh`. Create a series-level overview with `scripts/make_series_overview.sh` when there are exactly nine series.
-14. Always create `00-all-images-overview.png` directly from every original in the delivered collection, in reading order, with `scripts/make_all_images_overview.sh`. In expansion mode this includes the immutable classic eight plus all additions. Exclude contact sheets and other overview files from its inputs. This final collage is mandatory even when ImageMagick requires a reduced thumbnail size.
-15. Save resolved identity, style lock, random seed, palette draw, user-appended themes, and all concept prompts as `PROMPTS.md`. Save counts and validation results as `QA.md`.
+1. Resolve feature switches from the first user message. Accept natural language or the copyable YAML-like block in `references/feature-switches.md`. Missing switches are `on`; do not interpret omission as opt-out.
+2. Run `scripts/calculate_feature_plan.py` with the resolved values. Tell the user the enabled modules and expected original-image count before generation, then continue without requiring confirmation unless the configuration is invalid.
+3. Extract identity DNA: face and jaw shape, brows, eyes, nose, mouth, hair length/texture/fringe/sides, apparent age range, posture, build, visible presentation cues, and source-supported clothing/accessories. Never assert gender identity.
+4. Separate identity, style, and palette. The bundled yellow/cobalt palette belongs only to the classic series; it is not the user's permanent palette or favorite color.
+5. Apply presentation guardrails from visible evidence, not stereotypes. Never transfer bows, ties, ribbons, curls, glasses, jewelry, facial hair, or other identity traits from style assets unless visible in the user photo or explicitly requested. Preserve hair length and texture across every module and angle.
+6. Establish enabled series:
+   - classic series when `classic_series` is on
+   - `random_theme_count` blind-box themes when `random_theme_series` is on
+   - every user-requested theme appended after random themes
+7. If random or user themes are enabled, run `scripts/draw_theme_seed.py` exactly once. Use `--count 0` when random themes are off, and pass user themes through `--user-theme`. Record the seed and complete JSON draw in `PROMPTS.md`. On technical retry, reuse `--seed`.
+8. Freeze one canonical character specification per series: identity traits, hairstyle, outfit silhouette, palette roles, facial construction, crayon texture, and white cutout silhouette. All modules in that series must use it.
+9. Generate enabled modules in this order:
+   - `base_designs`: eight independent action/accessory designs
+   - `front_full_body`: one centered head-to-toe front view
+   - `angle_views`: eight independent neutral head-to-toe turnaround views using the exact angle list in `references/feature-switches.md`
+   - `emotion_pack`: 24 independent head-and-shoulders expressions using the exact emotion list in that reference
+10. Use one image-generation call per original image. Never use a grid as a substitute for deliverable originals. For consistency, pass the user photo, visual-language assets, and the closest approved same-series anchor to angle and emotion calls.
+11. Generate in batches of four when supported. Validate each batch and regenerate only failed cells with targeted corrections.
+12. Save non-destructively using the structure in `references/feature-switches.md`. When expanding an approved classic set, record its hashes and never overwrite, rename, recompress, or regenerate it; write classic extensions to a sibling directory.
+13. If `series_collages` is on, create module and series overview images from originals only. If `all_images_collage` is on, create `00-all-images-overview.png` from every delivered original exactly once, including immutable originals in expansion mode. Never include an overview as input to another original-level collage.
+14. Save `FEATURES.json`, `PROMPTS.md`, and `QA.md`. Record resolved switches, counts, random seed, user themes, file inventory, dimensions, unique hashes, baseline hashes, and collage input counts.
 
-## Validation checklist
+## Validation
 
-Check all of the following before delivery:
+- Counts exactly match `scripts/calculate_feature_plan.py`.
+- Each series preserves at least four recognizable identity traits and one canonical hairstyle/outfit system.
+- The front full-body image is head-to-toe, centered, front-facing, unobstructed, and has readable hands and feet.
+- All eight requested angles are present exactly once; left/right and front/back views are not mislabeled or mirrored duplicates.
+- All 24 emotions are present exactly once and remain readable at avatar size without changing identity, hairstyle, outfit, or palette.
+- Emotions change brows, eyes, mouth, cheeks, and restrained gesture marks—not face structure or costume.
+- Random themes come from the recorded draw. User-requested themes append after them and never replace them.
+- Every deliverable is a separate square raster image with no duplicate hash, text, logo, watermark, unrelated character, photorealism, gradients, 3D, or polished vector finish.
+- Enabled collages contain the expected originals exactly once. Disabled modules produce no deliverable files or empty folders.
 
-- Quick mode has exactly 8 separate square images. Blind-box full mode has `72 + 8N`, where `N` is the number of requested themes. Expansion mode has `64 + 8N` new images plus an explicit reference to the unchanged classic 8.
-- The person remains plausibly recognizable through at least four extracted identity traits.
-- Every image stays in the same handmade crayon/cut-paper visual language, even when the palette changes.
-- The classic series keeps its approved palette and concepts unchanged during expansion.
-- The eight blind-box palettes come from the recorded random draw and are distinguishable from the classic palette and from one another. They are coordinated color systems, not superficial hue filters.
-- User-requested themes appear after the random eight and do not replace them.
-- Each palette defines background, line, base, and accent roles with readable contrast.
-- Within every series, all eight images differ in hairstyle treatment, action, signature accessory, and clothing detail—not merely color.
-- Across all expansion images, core props and actions do not repeat unless the user requests repetition.
-- No image drifts into photorealism, realistic skin rendering, gradients, 3D, or polished vector art.
-- Hands have plausible finger counts and the requested gesture is readable.
-- No identity, accessory, hairstyle, or gender-presentation cue leaked from a bundled style asset.
-- No text, logo, watermark, or unrelated extra character appears.
-- Files are square raster images, uniquely hashed, and grouped correctly.
-- `00-all-images-overview.png` contains every delivered original exactly once and no overview recursively contains itself.
+## Handoff
 
-## Output handoff
-
-Show `00-all-images-overview.png` inline. Report the absolute output directories, mode, random seed, random themes, appended user themes, counts, `PROMPTS.md`, `QA.md`, and whether the built-in image-generation tool was used. Briefly name the series and their eight concepts in reading order. In expansion mode, explicitly confirm that the original eight were not modified.
-
-## Contact sheets
-
-Create each eight-image sheet:
-
-```bash
-bash scripts/make_contact_sheet.sh \
-  --out <series-directory>/00-overview.png \
-  <image-01> <image-02> <image-03> <image-04> \
-  <image-05> <image-06> <image-07> <image-08>
-```
-
-Create the complete nine-series overview:
-
-```bash
-bash scripts/make_series_overview.sh \
-  --out <collection-directory>/00-complete-9-series-overview.png \
-  <classic-overview> <theme-01-overview> <theme-02-overview> \
-  <theme-03-overview> <theme-04-overview> <theme-05-overview> \
-  <theme-06-overview> <theme-07-overview> <theme-08-overview>
-```
-
-These overview scripts require ImageMagick and never modify source images.
-
-Create the mandatory collage from all original images:
-
-```bash
-bash scripts/make_all_images_overview.sh \
-  --out <collection-directory>/00-all-images-overview.png \
-  <all-original-images-in-reading-order>
-```
+Show `00-all-images-overview.png` inline when enabled. Report the resolved switches, series count, originals per series, total delivered originals, newly generated count, random seed, appended themes, output path, `FEATURES.json`, `PROMPTS.md`, and `QA.md`. In expansion mode, explicitly confirm that existing originals were unchanged.

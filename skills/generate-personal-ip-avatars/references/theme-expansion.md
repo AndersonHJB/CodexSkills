@@ -1,6 +1,6 @@
-# Theme expansion: eight palettes × eight concepts
+# Theme expansion: random palettes and enabled character modules
 
-Read this file completely for full or expansion mode. The objective is 64 genuinely designed additions, not eight copies of the same character recolored eight times.
+Read this file completely whenever random or user themes are enabled. Apply the resolved feature switches: each theme receives only the enabled modules. When `base_designs` is on, its eight concepts must be genuinely designed additions rather than recolors of one pose.
 
 ## Freeze the baseline
 
@@ -43,9 +43,9 @@ Requirements:
 
 The script's palette values are starting anchors. Refine contrast if needed while preserving the sampled hue family, mood, value direction, and harmony. Theme names should be freshly coined from the sampled mood and setting rather than selected from a fixed preset list.
 
-## Build the 8 × 8 concept matrix
+## Build the action-design matrix when enabled
 
-Plan all cells before generating. The default has 64 random-theme cells; append eight cells for every user-requested theme. Every row is one palette theme; every row contains eight different actions and eight different signature props. Across the entire matrix, avoid repeating the same core action-prop pair.
+When `base_designs` is on, plan all action-design cells before generating. The default has 64 random-theme cells; append eight cells for every user-requested theme. Every row is one palette theme; every row contains eight different actions and eight different signature props. Across the entire matrix, avoid repeating the same core action-prop pair. When it is off, skip this matrix and create no design folders; the canonical series specification still drives any enabled full-body, angle, or emotion modules.
 
 For each cell specify:
 
@@ -90,17 +90,18 @@ Create only this single character image, not a grid or contact sheet. Keep the p
 
 ## Output structure
 
-Use stable, sortable names:
+Use the module structure defined in `feature-switches.md`. For each random or user theme, create only enabled module folders:
 
 ```text
-00-classic/01-...png ... 08-...png
-01-<random-theme>/01-...png ... 08-...png
-...
-08-<random-theme>/01-...png ... 08-...png
-09-<user-theme>/01-...png ... 08-...png
+01-<random-theme>/
+  01-designs/
+  02-front-full-body/
+  03-angle-views/
+  04-emotions/
+09-<user-theme>/
 ```
 
-In expansion mode, keep the approved classic directory where it is and begin the new sibling collection at `01-<theme>`.
+Omit disabled module folders. In expansion mode, keep approved classic files where they are and put classic-only additions in `00-classic-extensions/`.
 
 Record in `PROMPTS.md`:
 
@@ -110,7 +111,7 @@ Record in `PROMPTS.md`:
 - random seed and raw blind-box JSON draw
 - palette names, role colors, and rationale
 - which themes were appended from the user's request
-- the complete concept matrix
+- the complete prompt plan for every enabled module
 
 Record in `QA.md`:
 
@@ -119,4 +120,5 @@ Record in `QA.md`:
 - unique-hash check
 - classic baseline hashes before and after expansion
 - any regenerated cells and targeted corrections
+- angle-view and emotion coverage checks when enabled
 - all-images collage count and input list

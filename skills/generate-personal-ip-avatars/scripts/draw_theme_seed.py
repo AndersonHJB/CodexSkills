@@ -46,13 +46,16 @@ def main() -> None:
     parser.add_argument("--user-theme", action="append", default=[])
     parser.add_argument("--seed", type=int)
     args = parser.parse_args()
-    if args.count < 1:
-        parser.error("--count must be positive")
+    if args.count < 0:
+        parser.error("--count cannot be negative")
 
     seed = args.seed if args.seed is not None else secrets.randbits(64)
     rng = random.Random(seed)
     offset = rng.uniform(0, 360)
-    hues = [(offset + index * 360 / args.count + rng.uniform(-12, 12)) % 360 for index in range(args.count)]
+    hues = [] if args.count == 0 else [
+        (offset + index * 360 / args.count + rng.uniform(-12, 12)) % 360
+        for index in range(args.count)
+    ]
     rng.shuffle(hues)
     names: set[str] = set()
     random_themes = []

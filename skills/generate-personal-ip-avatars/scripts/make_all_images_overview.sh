@@ -26,9 +26,20 @@ for input_path in "$@"; do
 done
 
 mkdir -p "$(dirname "$output_path")"
+image_count=$#
+columns=8
+thumbnail=320
+if (( image_count > 200 )); then
+  columns=16
+  thumbnail=240
+elif (( image_count > 100 )); then
+  columns=12
+  thumbnail=280
+fi
+
 magick montage "$@" \
-  -thumbnail '320x320>' \
-  -tile '8x' \
+  -thumbnail "${thumbnail}x${thumbnail}>" \
+  -tile "${columns}x" \
   -geometry '+8+8' \
   -background '#f2f2f2' \
   "$output_path"
