@@ -1,6 +1,8 @@
-# Prompt set
+# Classic prompt set
 
 Read this file completely before generating. Replace `<IDENTITY_DNA>` and `<PRESENTATION_GUARDRAILS>` in every prompt.
+
+This is the approved baseline series. Its yellow/cobalt/red palette belongs to the classic set only; it must not be treated as the user's permanent brand palette. During expansion, keep these eight images unchanged and use `theme-expansion.md` for the additional palettes.
 
 ## Common prompt
 
