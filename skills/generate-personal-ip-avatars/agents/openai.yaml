@@ -1,0 +1,4 @@
+interface:
+  display_name: "个人 IP 角色批量生成"
+  short_description: "从一张人物参考照批量设计 8 张统一画风个人 IP"
+  default_prompt: "Use $generate-personal-ip-avatars to turn my reference photo into eight distinct hand-drawn personal IP character images."

@@ -10,11 +10,44 @@ https://github.com/AndersonHJB/CodexSkills
 
 ## Skills 列表
 
+- `generate-personal-ip-avatars`：用户只需提供一张人物参考照，即可批量生成 8 张同画风、不同发型处理、动作和标志性配饰的个人 IP 插画；自动适配人物的视觉呈现，不把男性、女性或中性形象写死。
 - `wechat-article-pipeline`：微信公众号文章流水线，支持文章重写、吸金标题与摘要、教程插图、公众号封面、图片上传 PicGoImage、Markdown 图片链接替换、文章归档、公众号可复制 HTML 排版。
 - `xiaohongshu-post-imagegen`：小红书帖子图生成工作流，支持按主题生成多张轮播插图、图片内中文文案、整帖统一发布文案、标题备选、互动引导和标签组合。
 - `wechat-chat-to-xiaohongshu`：微信聊天截图转小红书工作流，支持截图排序、OCR、证据核对、严格匿名化、1080×1440 轮播排版、标题正文标签和隐私质检。
 - `build-wechat-sticker-pack`：从一张或多张参考图片，全流程生成 20 张独立 Q 版微信表情、发布横幅/封面/聊天图标、填写文案、含义词、QA 报告、原图归档及双压缩包。
 - `cola-voice-delivery`：使用 ListenHub 将文本或播客转成晓曼与 Cola 两种中文女生声，按输入长度动态分段，交付每个片段和两种音声的完整拼接 MP3。
+
+## 个人 IP 角色批量生成 Skill
+
+`generate-personal-ip-avatars` 会从一张清晰人物参考照中提取脸型、五官、发长、发质、轮廓、年龄感、姿态和真实配饰，再生成 8 张彼此有明显设计差异、但角色身份与手绘画风一致的方形个人 IP 插画。
+
+主要能力：
+
+- 自动分析人物的可见呈现线索，但不会把外观推断表述成确定性别，也不要求用户自报性别；
+- 同时适用于男性、女性、中性、非二元或外观线索不明确的人物照片；
+- 线索不明确时自动采用 `presentation-neutral` 中性设计，不擅自添加蝴蝶结、领带、首饰或其他性别化元素；
+- 内置参考图只约束黄色背景、钴蓝蜡笔线条、白色留白、腮红圆点和随手涂鸦等视觉语言，不会覆盖用户的身份、发型或配饰；
+- 8 张图分别改变发型处理、动作、服装细节和标志性配饰，不以简单换色冒充不同方案；
+- 每张图独立生成，并可使用 ImageMagick 自动拼成 `00-overview.png` 总览图；
+- 最终同时保存 8 张原图、总览图和完整的 `PROMPTS.md`。
+
+安装：
+
+```bash
+git clone https://github.com/AndersonHJB/CodexSkills.git
+mkdir -p ~/.codex/skills/generate-personal-ip-avatars
+rsync -a CodexSkills/skills/generate-personal-ip-avatars/ ~/.codex/skills/generate-personal-ip-avatars/
+```
+
+安装完成后重启 Codex 或新建会话，上传一张清晰的人物参考图并发送：
+
+```text
+使用 $generate-personal-ip-avatars，根据这张人物参考图设计并生成 8 张个人 IP 插画。
+保持同一手绘画风和人物辨识度，但让 8 张的发型处理、动作与标志性配饰明显不同。
+请自动适配人物呈现，不要从风格参考图复制不属于这个人的性别特征或配饰。
+```
+
+可选依赖：安装 ImageMagick 后会自动制作 8 图总览；没有 ImageMagick 时仍会正常交付 8 张独立图片。
 
 ## 微信聊天截图转小红书 Skill
 
@@ -186,6 +219,12 @@ wechat-chat-to-xiaohongshu
 
 安装微信表情包 Skill 时，把上面的 `wechat-article-pipeline` 替换为 `build-wechat-sticker-pack` 即可。
 
+安装个人 IP 角色批量生成 Skill 时，把 Skill 名称替换为：
+
+```text
+generate-personal-ip-avatars
+```
+
 安装 Cola 双音声长文朗读 Skill 时，把上面的 Skill 名称替换为：
 
 ```text
@@ -251,6 +290,13 @@ mkdir -p ~/.codex/skills/build-wechat-sticker-pack
 rsync -a skills/build-wechat-sticker-pack/ ~/.codex/skills/build-wechat-sticker-pack/
 ```
 
+安装个人 IP 角色批量生成 Skill：
+
+```bash
+mkdir -p ~/.codex/skills/generate-personal-ip-avatars
+rsync -a skills/generate-personal-ip-avatars/ ~/.codex/skills/generate-personal-ip-avatars/
+```
+
 安装 Cola 双音声长文朗读 Skill：
 
 ```bash
@@ -307,6 +353,7 @@ ls ~/.codex/skills/wechat-article-pipeline
 ls ~/.codex/skills/xiaohongshu-post-imagegen
 ls ~/.codex/skills/wechat-chat-to-xiaohongshu
 ls ~/.codex/skills/build-wechat-sticker-pack
+ls ~/.codex/skills/generate-personal-ip-avatars
 ```
 
 也可以检查 Skill 文件是否存在：
@@ -316,6 +363,7 @@ test -f ~/.codex/skills/wechat-article-pipeline/SKILL.md && echo "installed"
 test -f ~/.codex/skills/xiaohongshu-post-imagegen/SKILL.md && echo "installed"
 test -f ~/.codex/skills/wechat-chat-to-xiaohongshu/SKILL.md && echo "installed"
 test -f ~/.codex/skills/build-wechat-sticker-pack/SKILL.md && echo "installed"
+test -f ~/.codex/skills/generate-personal-ip-avatars/SKILL.md && echo "installed"
 ```
 
 在 Codex 中新建会话后，如果任务匹配 Skill 的描述，Codex 会自动使用对应 Skill。
