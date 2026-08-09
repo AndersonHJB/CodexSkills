@@ -19,7 +19,7 @@ Bundle `assets/00-aiyc-logo.svg` into every gallery output as the header logo an
 
 ## Design and license
 
-The bundled template adapts the App scene from `esther-design-system` by ESTHER不二. Preserve the visible joint credit `Bornforthis AI实验室出品 & ESTHER不二`, the hidden ESTHER signature, the CC BY-NC-SA 4.0 notice, and non-commercial-use statement. Link the visible repository credit to `https://github.com/AndersonHJB/CodexSkills`. Keep the warm paper background, blue/yellow/red hierarchy, serif headings, sans-serif body, responsive layout, reduced-motion support, and non-generic editorial character.
+The bundled template adapts the App scene from `esther-design-system` by ESTHER不二. Preserve the visible joint credit `Bornforthis AI实验室出品 & ESTHER不二`, the hidden ESTHER signature, the CC BY-NC-SA 4.0 notice, and non-commercial-use statement. Keep the visible link label as `Design System` while linking it to `https://github.com/AndersonHJB/CodexSkills`; never expose the raw GitHub URL as footer text. Keep the warm paper background, blue/yellow/red hierarchy, serif headings, sans-serif body, responsive layout, reduced-motion support, and non-generic editorial character.
 
 ## Command
 
