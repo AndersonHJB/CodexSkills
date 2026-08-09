@@ -1,20 +1,20 @@
 ---
 name: generate-personal-ip-avatars
-description: "Design a gender-adaptive personal-IP cartoon system from one portrait for users with no art background. Provides independently switchable modules for classic and random color themes, eight action designs, a front-facing full-body character, eight-angle turnaround portraits, a comprehensive 24-emotion pack, user-requested color themes, per-series collages, and one all-images collage. All features default on. Use for personal IP, cartoon identity, character sheets, expression packs, turnarounds, avatar blind boxes, or expansion of an approved character set."
+description: "Design a gender-adaptive personal-IP cartoon system from one portrait for users with no art background. Provides classic, random, and guaranteed light-palette blind-box series plus independently switchable action designs, front full-body characters, eight-angle turnarounds, 24-emotion packs, user-requested colors, and collages. When the user gives no explicit feature-control instruction, every feature defaults on. Use for personal IP, cartoon identity, character sheets, expression packs, turnarounds, avatar blind boxes, or expansion of an approved character set."
 ---
 
 # Generate Personal IP Avatars
 
-Build a recognizable, non-photorealistic IP character system from one portrait. All modules default on, but the user may enable or disable each module in the opening request.
+Build a recognizable, non-photorealistic IP character system from one portrait. If the user gives no explicit feature-control instruction, enable every module. Change switches only when the user deliberately supplies a `功能开关` block or an unambiguous enable/disable instruction.
 
-With defaults, generate nine series: one classic plus eight blind-box random themes. Each series contains 41 originals:
+With defaults, generate eleven series: one classic, eight unrestricted blind-box themes, and two guaranteed light-palette blind-box themes. Each series contains 41 originals:
 
 - 8 action/accessory designs
 - 1 front-facing full-body hero image
 - 8 angle views
 - 24 comprehensive emotions
 
-Default total: `9 × 41 = 369` originals. Each user-requested color theme appends another 41 originals.
+Default total: `11 × 41 = 451` originals. Each user-requested color theme appends another 41 originals.
 
 ## Required reading and input
 
@@ -29,7 +29,7 @@ The user photo is the sole identity and presentation source. Bundled assets prov
 
 ## Workflow
 
-1. Resolve feature switches from the first user message. Accept natural language or the copyable YAML-like block in `references/feature-switches.md`. Missing switches are `on`; do not interpret omission as opt-out.
+1. Detect explicit feature-control intent. If neither a `功能开关` block nor an unambiguous enable/disable instruction appears, force the complete default configuration on. If control intent is explicit, resolve only the stated overrides and keep omitted switches on; never interpret mere omission, short wording, or missing module names as opt-out.
 2. Run `scripts/calculate_feature_plan.py` with the resolved values. Tell the user the enabled modules and expected original-image count before generation, then continue without requiring confirmation unless the configuration is invalid.
 3. Extract identity DNA: face and jaw shape, brows, eyes, nose, mouth, hair length/texture/fringe/sides, apparent age range, posture, build, visible presentation cues, and source-supported clothing/accessories. Never assert gender identity.
 4. Separate identity, style, and palette. The bundled yellow/cobalt palette belongs only to the classic series; it is not the user's permanent palette or favorite color.
@@ -37,8 +37,9 @@ The user photo is the sole identity and presentation source. Bundled assets prov
 6. Establish enabled series:
    - classic series when `classic_series` is on
    - `random_theme_count` blind-box themes when `random_theme_series` is on
+   - `light_theme_count` newly designed light-palette blind-box themes when `light_theme_series` is on
    - every user-requested theme appended after random themes
-7. If random or user themes are enabled, run `scripts/draw_theme_seed.py` exactly once. Use `--count 0` when random themes are off, and pass user themes through `--user-theme`. Record the seed and complete JSON draw in `PROMPTS.md`. On technical retry, reuse `--seed`.
+7. If random, light, or user themes are enabled, run `scripts/draw_theme_seed.py` exactly once. Use `--count 0` or `--light-count 0` when its series type is off, and pass user themes through `--user-theme`. Record the seed and complete JSON draw in `PROMPTS.md`. On technical retry, reuse `--seed`.
 8. Freeze one canonical character specification per series: identity traits, hairstyle, outfit silhouette, palette roles, facial construction, crayon texture, and white cutout silhouette. All modules in that series must use it.
 9. Generate enabled modules in this order:
    - `base_designs`: eight independent action/accessory designs
@@ -59,7 +60,8 @@ The user photo is the sole identity and presentation source. Bundled assets prov
 - All eight requested angles are present exactly once; left/right and front/back views are not mislabeled or mirrored duplicates.
 - All 24 emotions are present exactly once and remain readable at avatar size without changing identity, hairstyle, outfit, or palette.
 - Emotions change brows, eyes, mouth, cheeks, and restrained gesture marks—not face structure or costume.
-- Random themes come from the recorded draw. User-requested themes append after them and never replace them.
+- Random and light themes come from the recorded draw. Light themes keep high-value backgrounds and pastel clothing while retaining readable dark line contrast. User-requested themes append after them and never replace them.
+- Every light series must be a newly designed character system with its own outfit silhouette, eight action-prop concepts, doodle vocabulary, and canonical anchor—not a recolor of an existing dark or random series.
 - Every deliverable is a separate square raster image with no duplicate hash, text, logo, watermark, unrelated character, photorealism, gradients, 3D, or polished vector finish.
 - Enabled collages contain the expected originals exactly once. Disabled modules produce no deliverable files or empty folders.
 

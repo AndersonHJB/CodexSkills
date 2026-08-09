@@ -4,12 +4,13 @@ Read this file completely at the beginning of every personal-IP task.
 
 ## Default configuration
 
-All features default to enabled. Accept either natural-language instructions or this YAML-like block:
+All features default to enabled. This complete default applies whenever the user does not deliberately provide a `功能开关` block or an unambiguous enable/disable instruction. Accept this YAML-like block:
 
 ```yaml
 功能开关:
   经典主题组: 开
   随机主题组: 开
+  浅色主题组: 开
   基础动作设计: 开
   正面全身照: 开
   八角度角色照: 开
@@ -17,6 +18,7 @@ All features default to enabled. Accept either natural-language instructions or 
   分组拼图: 开
   全部图片拼图: 开
 随机主题数量: 8
+浅色主题数量: 2
 喜欢的主题色: []
 ```
 
@@ -26,6 +28,7 @@ Map these labels to canonical keys:
 |---|---|---:|---:|
 | 经典主题组 | `classic_series` | on | creates one series |
 | 随机主题组 | `random_theme_series` | on | creates `random_theme_count` series |
+| 浅色主题组 | `light_theme_series` | on | creates `light_theme_count` new light series |
 | 基础动作设计 | `base_designs` | on | 8 |
 | 正面全身照 | `front_full_body` | on | 1 |
 | 八角度角色照 | `angle_views` | on | 8 |
@@ -35,7 +38,12 @@ Map these labels to canonical keys:
 
 Every item in `喜欢的主题色` creates one appended series. A deliberately grouped phrase such as `蓝粉撞色` is one theme; separately listed colors are separate themes. User themes are additions and never replace the random themes.
 
-If the user supplies no switch block, apply the defaults. If the user specifies only some switches, preserve defaults for all omitted switches. Natural-language statements such as “不要情绪包” or “只要全身和角度” override defaults. In a “只要” request, disable unmentioned image-generation modules while keeping QA enabled; keep collage switches on unless explicitly disabled.
+Apply this resolution order:
+
+1. If there is no explicit feature-control intent, enable every switch with `random_theme_count=8` and `light_theme_count=2`. Do not infer disabled modules from a short request or from modules the user did not mention.
+2. A `功能开关` block activates control mode. Apply stated values and preserve `on` for every omitted key.
+3. An unambiguous natural-language command such as “关闭情绪包” or “只要全身和角度” also activates control mode. In a “只要” request, disable unmentioned image-generation modules while keeping QA enabled; keep collage switches on unless explicitly disabled.
+4. Statements about style, quantity, color preference, or desired output are not feature-control intent unless they explicitly enable, disable, include-only, or exclude a module.
 
 At least one series and one image-generation module must remain enabled. `FEATURES.json` must contain the fully resolved canonical configuration.
 
@@ -43,12 +51,12 @@ At least one series and one image-generation module must remain enabled. `FEATUR
 
 Let:
 
-- `S = classic_series + random_theme_count + user_theme_count`, counting only enabled series
+- `S = classic_series + random_theme_count + light_theme_count + user_theme_count`, counting only enabled series
 - `P = 8×base_designs + 1×front_full_body + 8×angle_views + 24×emotion_pack`
 
 Then `delivered originals = S × P`.
 
-Default: `S=9`, `P=41`, total `369`. Each user theme adds 41 when all modules are on. In expansion mode with an existing classic eight, those eight count as delivered originals but not newly generated originals.
+Default: `S=11`, `P=41`, total `451`. Each user theme adds 41 when all modules are on. In expansion mode with an existing classic eight, those eight count as delivered originals but not newly generated originals.
 
 Run the deterministic count calculator before generation:
 
@@ -56,6 +64,7 @@ Run the deterministic count calculator before generation:
 python3 scripts/calculate_feature_plan.py \
   --classic on \
   --random-count 8 \
+  --light-count 2 \
   --user-theme-count 0 \
   --base-designs on \
   --front-full-body on \

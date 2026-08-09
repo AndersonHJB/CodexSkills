@@ -13,6 +13,8 @@ import secrets
 MOODS = ["清醒", "松弛", "冒险", "温柔", "未来", "复古", "活力", "静谧", "俏皮", "沉稳", "梦游", "自然"]
 SETTINGS = ["晨雾", "午夜街区", "海风", "山野", "工作室", "宇宙站", "旧书房", "运动场", "甜品铺", "雨后", "音乐节", "远行"]
 HARMONIES = ["analogous", "complementary", "split-complementary", "triadic"]
+LIGHT_MOODS = ["轻盈", "清甜", "柔和", "晴朗", "奶油", "空气感", "春日", "微光"]
+LIGHT_SETTINGS = ["云朵", "汽水", "花园", "晨光", "海盐", "纸鸢", "柠檬糖", "薄荷窗"]
 
 
 def hex_color(hue: float, saturation: float, lightness: float) -> str:
@@ -40,14 +42,32 @@ def draw_palette(rng: random.Random, hue: float, harmony: str) -> dict[str, str]
     return {"background": background, "line": line, "base": base, "accent": accent}
 
 
+def draw_light_palette(rng: random.Random, hue: float, harmony: str) -> dict[str, str]:
+    """Draw a genuinely light palette while retaining readable line contrast."""
+    offsets = {
+        "analogous": (rng.choice([24, 42]), rng.choice([145, 185])),
+        "complementary": (rng.choice([165, 195]), rng.choice([150, 210])),
+        "split-complementary": (rng.choice([145, 215]), rng.choice([165, 225])),
+        "triadic": (rng.choice([110, 130]), rng.choice([225, 250])),
+    }
+    base_offset, accent_offset = offsets[harmony]
+    return {
+        "background": hex_color(hue, rng.uniform(0.22, 0.45), rng.uniform(0.88, 0.95)),
+        "line": hex_color(hue + 170 + rng.uniform(-16, 16), rng.uniform(0.38, 0.62), rng.uniform(0.24, 0.36)),
+        "base": hex_color(hue + base_offset, rng.uniform(0.28, 0.52), rng.uniform(0.72, 0.84)),
+        "accent": hex_color(hue + accent_offset, rng.uniform(0.48, 0.72), rng.uniform(0.64, 0.76)),
+    }
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Draw random personal-IP theme seeds.")
     parser.add_argument("--count", type=int, default=8)
+    parser.add_argument("--light-count", type=int, default=2)
     parser.add_argument("--user-theme", action="append", default=[])
     parser.add_argument("--seed", type=int)
     args = parser.parse_args()
-    if args.count < 0:
-        parser.error("--count cannot be negative")
+    if args.count < 0 or args.light_count < 0:
+        parser.error("theme counts cannot be negative")
 
     seed = args.seed if args.seed is not None else secrets.randbits(64)
     rng = random.Random(seed)
@@ -75,17 +95,43 @@ def main() -> None:
             "palette": draw_palette(rng, hue, harmony),
         })
 
+    light_offset = rng.uniform(0, 360)
+    light_hues = [] if args.light_count == 0 else [
+        (light_offset + index * 360 / args.light_count + rng.uniform(-16, 16)) % 360
+        for index in range(args.light_count)
+    ]
+    rng.shuffle(light_hues)
+    light_themes = []
+    for index, hue in enumerate(light_hues, start=1):
+        while True:
+            name = f"{rng.choice(LIGHT_MOODS)}·{rng.choice(LIGHT_SETTINGS)}"
+            if name not in names:
+                names.add(name)
+                break
+        harmony = rng.choice(HARMONIES)
+        light_themes.append({
+            "index": args.count + index,
+            "source": "blind-box-light",
+            "name_seed": name,
+            "hue_anchor": round(hue, 1),
+            "harmony": harmony,
+            "value_direction": "light",
+            "palette": draw_light_palette(rng, hue, harmony),
+        })
+
     user_themes = [
-        {"index": args.count + index, "source": "user-appended", "request": value}
+        {"index": args.count + args.light_count + index, "source": "user-appended", "request": value}
         for index, value in enumerate(args.user_theme, start=1)
     ]
     print(json.dumps({
         "seed": seed,
         "random_theme_count": len(random_themes),
+        "light_theme_count": len(light_themes),
         "user_theme_count": len(user_themes),
         "random_themes": random_themes,
+        "light_themes": light_themes,
         "user_themes": user_themes,
-        "total_expansion_themes": len(random_themes) + len(user_themes),
+        "total_expansion_themes": len(random_themes) + len(light_themes) + len(user_themes),
     }, ensure_ascii=False, indent=2))
 
 

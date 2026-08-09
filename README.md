@@ -10,7 +10,7 @@ https://github.com/AndersonHJB/CodexSkills
 
 ## Skills 列表
 
-- `generate-personal-ip-avatars`：为没有绘画和设计基础的用户打造可配置的专属 IP 角色盲盒；支持动作设计、正面全身、八角度全身转面、24 种情绪和全部图片拼图，每项功能均可开关且默认全开。
+- `generate-personal-ip-avatars`：为没有绘画和设计基础的用户打造可配置的专属 IP 角色盲盒；支持随机主题、两套保证浅色的新设计、动作、正面全身、八角度转面、24 种情绪和全部图片拼图。没有明确功能控制时默认全部开启。
 - `wechat-article-pipeline`：微信公众号文章流水线，支持文章重写、吸金标题与摘要、教程插图、公众号封面、图片上传 PicGoImage、Markdown 图片链接替换、文章归档、公众号可复制 HTML 排版。
 - `xiaohongshu-post-imagegen`：小红书帖子图生成工作流，支持按主题生成多张轮播插图、图片内中文文案、整帖统一发布文案、标题备选、互动引导和标签组合。
 - `wechat-chat-to-xiaohongshu`：微信聊天截图转小红书工作流，支持截图排序、OCR、证据核对、严格匿名化、1080×1440 轮播排版、标题正文标签和隐私质检。
@@ -21,7 +21,7 @@ https://github.com/AndersonHJB/CodexSkills
 
 `generate-personal-ip-avatars` 主要面向没有绘画基础、没有艺术细胞、不会配色，但想拥有专属 IP 角色的用户。它会从一张清晰人物参考照中提取脸型、五官、发长、发质、轮廓、年龄感、姿态和真实配饰，再把这些特征转译为统一手绘语言的方形个人 IP。
 
-一次生成大量方案并不是浪费生成能力，而是把插画设计中的试色、动作提案、全身设定、角色转面和情绪设计一次性可视化，让用户像开盲盒一样快速比较并选出值得继续精修的方向。默认全部功能开启会生成 369 张；用户可以在第一句话中关闭任意模块。完整中文教程和可复制配置见 [`skills/generate-personal-ip-avatars/README.md`](skills/generate-personal-ip-avatars/README.md)。
+一次生成大量方案并不是浪费生成能力，而是把插画设计中的试色、动作提案、全身设定、角色转面和情绪设计一次性可视化，让用户像开盲盒一样快速比较并选出值得继续精修的方向。默认全部功能开启会生成 451 张：1 个经典主题、8 个随机主题和 2 个保证为浅色且重新设计服装动作的主题。只有用户明确给出功能开关或开启/关闭指令时才进入控制模式。完整中文教程和可复制配置见 [`skills/generate-personal-ip-avatars/README.md`](skills/generate-personal-ip-avatars/README.md)。
 
 主要能力：
 

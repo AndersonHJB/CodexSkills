@@ -15,6 +15,7 @@ def main() -> None:
     parser = argparse.ArgumentParser(description="Calculate a personal-IP generation plan.")
     parser.add_argument("--classic", choices=("on", "off"), default="on")
     parser.add_argument("--random-count", type=int, default=8)
+    parser.add_argument("--light-count", type=int, default=2)
     parser.add_argument("--user-theme-count", type=int, default=0)
     parser.add_argument("--base-designs", choices=("on", "off"), default="on")
     parser.add_argument("--front-full-body", choices=("on", "off"), default="on")
@@ -23,10 +24,10 @@ def main() -> None:
     parser.add_argument("--existing-classic", action="store_true")
     args = parser.parse_args()
 
-    if args.random_count < 0 or args.user_theme_count < 0:
+    if args.random_count < 0 or args.light_count < 0 or args.user_theme_count < 0:
         parser.error("theme counts cannot be negative")
 
-    series_count = enabled(args.classic) + args.random_count + args.user_theme_count
+    series_count = enabled(args.classic) + args.random_count + args.light_count + args.user_theme_count
     per_series = (
         8 * enabled(args.base_designs)
         + enabled(args.front_full_body)
@@ -45,6 +46,12 @@ def main() -> None:
 
     result = {
         "series_count": series_count,
+        "series_counts": {
+            "classic": enabled(args.classic),
+            "random": args.random_count,
+            "light": args.light_count,
+            "user_appended": args.user_theme_count,
+        },
         "per_series_originals": per_series,
         "delivered_originals": delivered,
         "existing_immutable_originals": existing_count,

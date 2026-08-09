@@ -1,4 +1,4 @@
 interface:
   display_name: "个人 IP 角色批量生成"
-  short_description: "可选生成动作、全身、多角度和完整情绪的个人 IP 盲盒"
-  default_prompt: "Use $generate-personal-ip-avatars with all features enabled to create my complete personal-IP blind box, including action designs, front full-body images, eight-angle views, comprehensive emotion packs, and a collage of every delivered original."
+  short_description: "为零基础用户生成含两套浅色盲盒的完整个人 IP 角色系统"
+  default_prompt: "Use $generate-personal-ip-avatars with its default all-on configuration to create my complete personal-IP blind box, including two newly designed light-palette series and a collage of every delivered original."

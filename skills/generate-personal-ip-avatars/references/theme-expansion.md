@@ -1,6 +1,6 @@
-# Theme expansion: random palettes and enabled character modules
+# Theme expansion: random palettes, guaranteed light palettes, and enabled modules
 
-Read this file completely whenever random or user themes are enabled. Apply the resolved feature switches: each theme receives only the enabled modules. When `base_designs` is on, its eight concepts must be genuinely designed additions rather than recolors of one pose.
+Read this file completely whenever random, light, or user themes are enabled. Apply the resolved feature switches: each theme receives only the enabled modules. When `base_designs` is on, its eight concepts must be genuinely designed additions rather than recolors of one pose.
 
 ## Freeze the baseline
 
@@ -18,11 +18,25 @@ If the user names preferred colors or palettes, append each request without chan
 
 ```bash
 python3 scripts/draw_theme_seed.py --count 8 \
+  --light-count 2 \
   --user-theme "用户主题一" \
   --user-theme "用户主题二"
 ```
 
-Run it exactly once per collection. Record its numeric seed and complete JSON output in `PROMPTS.md` so the draw is auditable and reproducible. A rerun is allowed only after a technical failure before generation; reuse the recorded seed with `--seed` rather than opening a new blind box.
+Run it exactly once per collection. The default draw contains eight unrestricted themes plus two guaranteed light themes. Record its numeric seed and complete JSON output in `PROMPTS.md` so the draw is auditable and reproducible. A rerun is allowed only after a technical failure before generation; reuse the recorded seed with `--seed` rather than opening a new blind box.
+
+## Design two guaranteed light-palette series
+
+Treat `light_themes` as full new IP design systems, not recolors. For each light theme:
+
+- keep the background in a high-value range and use low-to-medium saturation pastel pigment
+- use a darker colored-pencil line so eyes, hair, hands, and silhouette remain readable
+- create a new outfit silhouette, layering logic, footwear, signature accessory family, and doodle vocabulary not used by neighboring themes
+- plan eight distinct action-prop concepts before generation; do not reuse the same pose with color substitutions
+- preserve the user's identity DNA and source-supported hairstyle while allowing a fresh, plausible styling treatment
+- avoid washed-out white-on-white faces, low-contrast linework, gradients, glow, or candy-like 3D rendering
+
+The two light themes must differ from each other in hue family and temperature. They are blind-box draws and therefore change for every new user unless a retry reuses the recorded seed.
 
 Resolve the draw into palettes using color harmony and the user's visible presentation only as an identity compatibility check. Do not assume the colors in the style reference are the user's personal colors. User themes are additional rows after the random eight; they never replace or recolor the random rows. Treat a deliberately grouped request such as “蓝粉渐变感” as one theme, and separately listed requests as separate themes.
 
@@ -37,7 +51,7 @@ Requirements:
 
 - Keep enough line/background contrast for the face and silhouette to read at avatar size.
 - Make neighboring themes different in hue family, value, temperature, or saturation—not only in name.
-- Include tonal variety: light, dark, warm, cool, quiet, and energetic themes where appropriate.
+- Include tonal variety: light, dark, warm, cool, quiet, and energetic themes where appropriate. The dedicated light themes are additional guarantees and do not replace tonal variety inside the unrestricted random draw.
 - Use flat pigment-like color. Avoid gradients, glow effects, realistic light, metallic rendering, and polished vector fills.
 - Keep the white cutout silhouette and handmade medium as the cross-theme visual glue.
 
@@ -45,7 +59,7 @@ The script's palette values are starting anchors. Refine contrast if needed whil
 
 ## Build the action-design matrix when enabled
 
-When `base_designs` is on, plan all action-design cells before generating. The default has 64 random-theme cells; append eight cells for every user-requested theme. Every row is one palette theme; every row contains eight different actions and eight different signature props. Across the entire matrix, avoid repeating the same core action-prop pair. When it is off, skip this matrix and create no design folders; the canonical series specification still drives any enabled full-body, angle, or emotion modules.
+When `base_designs` is on, plan all action-design cells before generating. The default has 64 unrestricted random-theme cells plus 16 guaranteed light-theme cells; append eight cells for every user-requested theme. Every row is one palette theme; every row contains eight different actions and eight different signature props. Across the entire matrix, avoid repeating the same core action-prop pair. When it is off, skip this matrix and create no design folders; the canonical series specification still drives any enabled full-body, angle, or emotion modules.
 
 For each cell specify:
 
