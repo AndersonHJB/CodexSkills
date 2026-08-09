@@ -1,6 +1,6 @@
 ---
 name: generate-personal-ip-avatars
-description: "Design a gender-adaptive personal-IP cartoon system from one portrait for users with no art background. Provides classic, random, guaranteed light-palette, industry full-body, and official brand or university VI theme modules plus action designs, front full-body characters, eight-angle turnarounds, 24-emotion packs, preferred colors, and collages. When the user gives no explicit feature-control instruction, every applicable feature defaults on. Use for personal IP, professional or industry avatars, campus-color characters, brand-guideline palettes, character sheets, expression packs, turnarounds, avatar blind boxes, or expansion of an approved set."
+description: "Design a gender-adaptive personal-IP cartoon system from one portrait for users with no art background. Provides classic, random, guaranteed light-palette, industry full-body, and official brand or university VI theme modules plus action designs, front full-body characters, eight-angle turnarounds, 24-emotion packs, collages, and an offline HTML selection gallery. When the user gives no explicit feature-control instruction, every applicable feature defaults on. Use for personal IP, professional or industry avatars, campus-color characters, character sheets, expression packs, avatar blind boxes, interactive image shortlisting, or expansion of an approved set."
 ---
 
 # Generate Personal IP Avatars
@@ -18,7 +18,7 @@ Default without a brand or institution input: `11 × 41 + 8 industry full-body =
 
 ## Required reading and input
 
-Read `references/feature-switches.md` completely at the start of every task. Read `references/prompt-set.md` whenever the classic series is enabled; use its eight concepts only when classic action designs are enabled. Read `references/theme-expansion.md` whenever random or user themes are enabled. Read `references/industry-brand-expansion.md` whenever industry full-body or brand/institution themes are enabled.
+Read `references/feature-switches.md` completely at the start of every task. Read `references/prompt-set.md` whenever the classic series is enabled; use its eight concepts only when classic action designs are enabled. Read `references/theme-expansion.md` whenever random or user themes are enabled. Read `references/industry-brand-expansion.md` whenever industry full-body or brand/institution themes are enabled. Read `references/selection-gallery.md` whenever the offline HTML gallery is enabled.
 
 Require one clear user reference photo showing the face. Accept additional photos when offered. If a local path is supplied, inspect it with `view_image`. Inspect both bundled visual-language assets before generation:
 
@@ -53,7 +53,8 @@ The user photo is the sole identity and presentation source. Bundled assets prov
 13. Generate in batches of four when supported. Validate each batch and regenerate only failed cells with targeted corrections.
 14. Save non-destructively using the structure in `references/feature-switches.md`. When expanding an approved set, record its hashes and never overwrite, rename, recompress, or regenerate it.
 15. If `series_collages` is on, create module and series overview images from originals only. If `all_images_collage` is on, create `00-all-images-overview.png` from every delivered original exactly once, including immutable originals and standalone industry images. Never include an overview as input to another original-level collage.
-16. Save `FEATURES.json`, `PROMPTS.md`, and `QA.md`. Record resolved switches, counts, random seed, user themes, official VI sources, file inventory, dimensions, unique hashes, baseline hashes, and collage input counts.
+16. If `selection_gallery` is on, run `scripts/build_selection_gallery.py` after image QA to create `00-selection-gallery.html`. Pass the exact delivered-original count as `--expected-count`; in expansion mode include frozen external originals through their SHA manifest. The page must work offline and preserve the ESTHER不二 attribution and CC BY-NC-SA 4.0 notice required by the bundled template.
+17. Save `FEATURES.json`, `PROMPTS.md`, and `QA.md`. Record resolved switches, counts, random seed, user themes, official VI sources, file inventory, dimensions, unique hashes, baseline hashes, collage input counts, gallery input count, and HTML interaction checks.
 
 ## Validation
 
@@ -69,7 +70,8 @@ The user photo is the sole identity and presentation source. Bundled assets prov
 - Brand or institution series use verified official colors but remain eight newly designed systems, not eight recolors. Do not reproduce protected marks by default or imply affiliation, certification, employment, or endorsement.
 - Every deliverable is a separate square raster image with no duplicate hash, text, logo, watermark, unrelated character, photorealism, gradients, 3D, or polished vector finish.
 - Enabled collages contain the expected originals exactly once. Disabled modules produce no deliverable files or empty folders.
+- The enabled HTML gallery references every delivered original exactly once, no overview or preview, and passes search, filters, shortlist, reject, modal, persistence, export, desktop, and mobile checks.
 
 ## Handoff
 
-Show `00-all-images-overview.png` inline when enabled. Report the resolved switches, series count, originals per series, total delivered originals, newly generated count, random seed, appended themes, output path, `FEATURES.json`, `PROMPTS.md`, and `QA.md`. In expansion mode, explicitly confirm that existing originals were unchanged.
+Show `00-all-images-overview.png` inline when enabled and link `00-selection-gallery.html` when enabled. Report the resolved switches, series count, originals per series, total delivered originals, newly generated count, random seed, appended themes, output path, `FEATURES.json`, `PROMPTS.md`, and `QA.md`. In expansion mode, explicitly confirm that existing originals were unchanged.

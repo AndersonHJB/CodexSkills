@@ -1,4 +1,4 @@
 interface:
   display_name: "个人 IP 角色批量生成"
-  short_description: "为零基础用户生成含行业全身与官方VI主题的完整个人IP系统"
-  default_prompt: "Use $generate-personal-ip-avatars with all features enabled unless I explicitly provide a 功能开关 block; generate the complete blind-box personal-IP system, add the eight-industry full-body pack, append eight complete official-VI palette series when a verified VI source is supplied, and build collages of every delivered original."
+  short_description: "为零基础用户生成完整个人IP系统与离线图片选择画廊"
+  default_prompt: "Use $generate-personal-ip-avatars with all features enabled unless I explicitly provide a 功能开关 block; generate the complete blind-box personal-IP system, include industry and verified official-VI series when requested, build collages, and create a beautiful offline HTML gallery for reviewing, shortlisting, rejecting, previewing, and exporting every delivered original."

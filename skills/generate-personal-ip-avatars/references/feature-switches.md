@@ -19,6 +19,7 @@ All features default to enabled. This complete default applies whenever the user
   全面情绪包: 开
   分组拼图: 开
   全部图片拼图: 开
+  HTML图片选择页面: 开
 随机主题数量: 8
 浅色主题数量: 2
 行业全身数量: 8
@@ -42,6 +43,7 @@ Map these labels to canonical keys:
 | 全面情绪包 | `emotion_pack` | on | 24 |
 | 分组拼图 | `series_collages` | on | overview only |
 | 全部图片拼图 | `all_images_collage` | on | overview only |
+| HTML图片选择页面 | `selection_gallery` | on | offline interactive page; no original count |
 
 Every item in `喜欢的主题色` creates one appended series. A deliberately grouped phrase such as `蓝粉撞色` is one theme; separately listed colors are separate themes. User themes are additions and never replace the random themes.
 
@@ -51,7 +53,7 @@ Apply this resolution order:
 
 1. If there is no explicit feature-control intent, enable every switch with `random_theme_count=8`, `light_theme_count=2`, `industry_count=8`, and data-dependent `brand_theme_count`. Do not infer disabled modules from a short request or from modules the user did not mention.
 2. A `功能开关` block activates control mode. Apply stated values and preserve `on` for every omitted key.
-3. An unambiguous natural-language command such as “关闭情绪包” or “只要全身和角度” also activates control mode. In a “只要” request, disable unmentioned image-generation modules while keeping QA enabled; keep collage switches on unless explicitly disabled.
+3. An unambiguous natural-language command such as “关闭情绪包” or “只要全身和角度” also activates control mode. In a “只要” request, disable unmentioned image-generation modules while keeping QA enabled; keep collage and HTML gallery switches on unless explicitly disabled.
 4. Statements about style, quantity, color preference, or desired output are not feature-control intent unless they explicitly enable, disable, include-only, or exclude a module.
 
 At least one complete series with one per-series image module, or the standalone industry full-body pack, must remain enabled. `FEATURES.json` must contain the fully resolved canonical configuration.
@@ -163,6 +165,7 @@ Use a numbered folder per enabled series:
 industry-full-body/
 20-<brand-or-institution-theme>/
 00-all-images-overview.png    # every delivered original exactly once
+00-selection-gallery.html     # offline search, filters, shortlist, reject, preview, export
 FEATURES.json
 PROMPTS.md
 QA.md
