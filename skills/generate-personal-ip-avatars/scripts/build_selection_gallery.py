@@ -6,6 +6,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import shutil
 from pathlib import Path
 
 
@@ -127,6 +128,10 @@ def main() -> None:
     html = html.replace("__GALLERY_TITLE__", args.title)
     html = html.replace("__GALLERY_DATA__", json.dumps(payload, ensure_ascii=False).replace("</", "<\\/"))
     output.parent.mkdir(parents=True, exist_ok=True)
+    logo = Path(__file__).resolve().parents[1] / "assets" / "00-aiyc-logo.svg"
+    logo_target = output.parent / logo.name
+    if logo.resolve() != logo_target.resolve():
+        shutil.copyfile(logo, logo_target)
     output.write_text(html, encoding="utf-8")
     print(json.dumps({"output": str(output), "originals": len(records)}, ensure_ascii=False))
 

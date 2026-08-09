@@ -70,7 +70,7 @@ The user photo is the sole identity and presentation source. Bundled assets prov
 - Brand or institution series use verified official colors but remain eight newly designed systems, not eight recolors. Do not reproduce protected marks by default or imply affiliation, certification, employment, or endorsement.
 - Every deliverable is a separate square raster image with no duplicate hash, text, logo, watermark, unrelated character, photorealism, gradients, 3D, or polished vector finish.
 - Enabled collages contain the expected originals exactly once. Disabled modules produce no deliverable files or empty folders.
-- The enabled HTML gallery references every delivered original exactly once, no overview or preview, and passes search, filters, shortlist, reject, modal, persistence, export, desktop, and mobile checks.
+- The enabled HTML gallery references every delivered original exactly once, no overview or preview, and passes search, filters, shortlist, reject, modal, persistent-storage status, WeChat copy, export, desktop, and mobile checks.
 
 ## Handoff
 
