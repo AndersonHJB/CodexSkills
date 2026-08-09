@@ -11,6 +11,8 @@ All features default to enabled. This complete default applies whenever the user
   经典主题组: 开
   随机主题组: 开
   浅色主题组: 开
+  行业全身IP组: 开
+  机构品牌主题组: 开
   基础动作设计: 开
   正面全身照: 开
   八角度角色照: 开
@@ -19,7 +21,10 @@ All features default to enabled. This complete default applies whenever the user
   全部图片拼图: 开
 随机主题数量: 8
 浅色主题数量: 2
+行业全身数量: 8
+机构品牌主题数量: 0
 喜欢的主题色: []
+机构或高校VI资料: []
 ```
 
 Map these labels to canonical keys:
@@ -29,6 +34,8 @@ Map these labels to canonical keys:
 | 经典主题组 | `classic_series` | on | creates one series |
 | 随机主题组 | `random_theme_series` | on | creates `random_theme_count` series |
 | 浅色主题组 | `light_theme_series` | on | creates `light_theme_count` new light series |
+| 行业全身IP组 | `industry_full_body_pack` | on | creates `industry_count` standalone originals |
+| 机构品牌主题组 | `brand_theme_series` | on | data-dependent; creates `brand_theme_count` complete series |
 | 基础动作设计 | `base_designs` | on | 8 |
 | 正面全身照 | `front_full_body` | on | 1 |
 | 八角度角色照 | `angle_views` | on | 8 |
@@ -38,25 +45,28 @@ Map these labels to canonical keys:
 
 Every item in `喜欢的主题色` creates one appended series. A deliberately grouped phrase such as `蓝粉撞色` is one theme; separately listed colors are separate themes. User themes are additions and never replace the random themes.
 
+`机构品牌主题组` is enabled but data-dependent. With no named brand, institution, official VI URL, or supplied manual, resolve `brand_theme_count=0`; never apply a specific organization's identity to every user. When the user supplies one official VI system and does not choose a count, resolve `brand_theme_count=8`. Each brand series receives all enabled per-series modules.
+
 Apply this resolution order:
 
-1. If there is no explicit feature-control intent, enable every switch with `random_theme_count=8` and `light_theme_count=2`. Do not infer disabled modules from a short request or from modules the user did not mention.
+1. If there is no explicit feature-control intent, enable every switch with `random_theme_count=8`, `light_theme_count=2`, `industry_count=8`, and data-dependent `brand_theme_count`. Do not infer disabled modules from a short request or from modules the user did not mention.
 2. A `功能开关` block activates control mode. Apply stated values and preserve `on` for every omitted key.
 3. An unambiguous natural-language command such as “关闭情绪包” or “只要全身和角度” also activates control mode. In a “只要” request, disable unmentioned image-generation modules while keeping QA enabled; keep collage switches on unless explicitly disabled.
 4. Statements about style, quantity, color preference, or desired output are not feature-control intent unless they explicitly enable, disable, include-only, or exclude a module.
 
-At least one series and one image-generation module must remain enabled. `FEATURES.json` must contain the fully resolved canonical configuration.
+At least one complete series with one per-series image module, or the standalone industry full-body pack, must remain enabled. `FEATURES.json` must contain the fully resolved canonical configuration.
 
 ## Count formula
 
 Let:
 
-- `S = classic_series + random_theme_count + light_theme_count + user_theme_count`, counting only enabled series
+- `S = classic_series + random_theme_count + light_theme_count + user_theme_count + brand_theme_count`, counting only enabled series
 - `P = 8×base_designs + 1×front_full_body + 8×angle_views + 24×emotion_pack`
+- `I = industry_count` when `industry_full_body_pack` is on, otherwise `0`
 
-Then `delivered originals = S × P`.
+Then `delivered originals = S × P + I`.
 
-Default: `S=11`, `P=41`, total `451`. Each user theme adds 41 when all modules are on. In expansion mode with an existing classic eight, those eight count as delivered originals but not newly generated originals.
+Default without a brand/institution input: `S=11`, `P=41`, `I=8`, total `459`. One supplied official VI system defaults to eight added complete series: `19×41+8=787`. Each ordinary preferred-color theme adds 41 when all modules are on.
 
 Run the deterministic count calculator before generation:
 
@@ -66,13 +76,16 @@ python3 scripts/calculate_feature_plan.py \
   --random-count 8 \
   --light-count 2 \
   --user-theme-count 0 \
+  --brand-theme-count 0 \
+  --industry-full-body-pack on \
+  --industry-count 8 \
   --base-designs on \
   --front-full-body on \
   --angle-views on \
   --emotion-pack on
 ```
 
-Add `--existing-classic` when the approved classic eight already exist.
+Add `--existing-original-count N` for expansion of a frozen collection. `--existing-classic` remains available for the older classic-eight workflow.
 
 ## Eight angle views
 
@@ -147,6 +160,8 @@ Use a numbered folder per enabled series:
 01-<random-theme>/
 ...
 09-<user-theme>/
+industry-full-body/
+20-<brand-or-institution-theme>/
 00-all-images-overview.png    # every delivered original exactly once
 FEATURES.json
 PROMPTS.md
