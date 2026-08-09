@@ -59,6 +59,8 @@ rsync -a CodexSkills/skills/generate-personal-ip-avatars/ ~/.codex/skills/genera
 
 默认全开且没有机构 VI 输入时生成 459 张；提供一套机构 VI 并使用默认 8 套扩展时生成 787 张。若只需要原来的基础 72 张，需要关闭浅色、行业、机构品牌、正面全身、八角度和情绪包；若只想测试一个主题的完整系统，可关闭其他主题与行业组，生成 41 张。详细开关模板请直接复制专属中文 README 中的示例。
 
+从人物与画风 DNA、首轮 8 稿、完整角色系统到 Skill 结构、测试、安装和 HTML 选图的零基础教程，见 [`zero-to-personal-ip-skill-tutorial.md`](skills/generate-personal-ip-avatars/references/zero-to-personal-ip-skill-tutorial.md)。
+
 拼图功能依赖 ImageMagick。启用“分组拼图”或“全部图片拼图”时，请确保系统可以运行 `magick`；如未安装，可先关闭两个拼图开关，其余独立图片仍可正常生成。
 
 ## 微信聊天截图转小红书 Skill

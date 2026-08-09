@@ -20,6 +20,8 @@ Default without a brand or institution input: `11 × 41 + 8 industry full-body =
 
 Read `references/feature-switches.md` completely at the start of every task. Read `references/prompt-set.md` whenever the classic series is enabled; use its eight concepts only when classic action designs are enabled. Read `references/theme-expansion.md` whenever random or user themes are enabled. Read `references/industry-brand-expansion.md` whenever industry full-body or brand/institution themes are enabled. Read `references/selection-gallery.md` whenever the offline HTML gallery is enabled.
 
+Read `references/zero-to-personal-ip-skill-tutorial.md` when the user asks how this workflow was developed, how to learn the process, how to build a similar Skill, or how to use the finished Skill as a beginner. Do not load the tutorial for ordinary image-generation tasks.
+
 Require one clear user reference photo showing the face. Accept additional photos when offered. If a local path is supplied, inspect it with `view_image`. Inspect both bundled visual-language assets before generation:
 
 - `assets/style-reference.png`
