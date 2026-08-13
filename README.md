@@ -16,6 +16,7 @@ https://github.com/AndersonHJB/CodexSkills
 - `wechat-chat-to-xiaohongshu`：微信聊天截图转小红书工作流，支持截图排序、OCR、证据核对、严格匿名化、1080×1440 轮播排版、标题正文标签和隐私质检。
 - `build-wechat-sticker-pack`：从一张或多张参考图片，全流程生成 20 张独立 Q 版微信表情、发布横幅/封面/聊天图标、填写文案、含义词、QA 报告、原图归档及双压缩包。
 - `cola-voice-delivery`：使用 ListenHub 将文本或播客转成晓曼与 Cola 两种中文女生声，按输入长度动态分段，交付每个片段和两种音声的完整拼接 MP3。
+- `bornforthis-illustrations`：为中文文章生成与 Esther／不二插画相同蜡笔绘本视觉体系的 Bornforthis 16:9 正文配图；固定短蓝碎发、纸白脸和黄腮红身份，服装、耳机等配饰随场景变化。
 
 ## 个人 IP 角色批量生成 Skill
 

@@ -1,7 +1,0 @@
-interface:
-  display_name: "Bornforthis 正文配图"
-  short_description: "生成白底、手绘蜡笔感的 Bornforthis 中文正文配图"
-  brand_color: "#2B7FD8"
-  default_prompt: "Use $bornforthis-illustrations to 为这篇中文文章设计并生成 Bornforthis 风格的正文配图。"
-policy:
-  allow_implicit_invocation: true
