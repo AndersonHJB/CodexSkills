@@ -16,7 +16,7 @@ https://github.com/AndersonHJB/CodexSkills
 - `wechat-chat-to-xiaohongshu`：微信聊天截图转小红书工作流，支持截图排序、OCR、证据核对、严格匿名化、1080×1440 轮播排版、标题正文标签和隐私质检。
 - `build-wechat-sticker-pack`：从一张或多张参考图片，全流程生成 20 张独立 Q 版微信表情、发布横幅/封面/聊天图标、填写文案、含义词、QA 报告、原图归档及双压缩包。
 - `cola-voice-delivery`：使用 ListenHub 将文本或播客转成晓曼与 Cola 两种中文女生声，按输入长度动态分段，交付每个片段和两种音声的完整拼接 MP3。
-- `bornforthis-illustrations`：为中文文章生成与 Esther／不二插画相同蜡笔绘本视觉体系的 Bornforthis 16:9 正文配图；固定短蓝碎发、纸白脸和黄腮红身份，服装、耳机等配饰随场景变化。
+- `bornforthis-illustrations`：为中文文章生成与 Esther／不二插画相同蜡笔绘本视觉体系的 Bornforthis 16:9 正文配图；内置 2 张身份锚点与 14 张完成度样例，固定短蓝碎发、外扩圆耳、纸白圆方脸和黄色圆脸颊身份，服装、耳机等配饰随场景变化。安装与使用见 [`skills/bornforthis-illustrations/README.md`](skills/bornforthis-illustrations/README.md)。
 
 ## 个人 IP 角色批量生成 Skill
 
@@ -63,6 +63,28 @@ rsync -a CodexSkills/skills/generate-personal-ip-avatars/ ~/.codex/skills/genera
 从人物与画风 DNA、首轮 8 稿、完整角色系统到 Skill 结构、测试、安装和 HTML 选图的零基础教程，见 [`zero-to-personal-ip-skill-tutorial.md`](skills/generate-personal-ip-avatars/references/zero-to-personal-ip-skill-tutorial.md)。
 
 拼图功能依赖 ImageMagick。启用“分组拼图”或“全部图片拼图”时，请确保系统可以运行 `magick`；如未安装，可先关闭两个拼图开关，其余独立图片仍可正常生成。
+
+## Bornforthis 正文配图 Skill
+
+`bornforthis-illustrations` 用于把中文文章中的关键判断、流程、结构、状态和隐喻转化为 16:9 蜡笔手绘正文配图。视觉上保持纯白背景、可见斜线笔触、深蓝晃动描边、少量中文短标注与大量留白；Bornforthis 必须亲自参与核心动作。
+
+角色身份稳定为钴蓝短刺发、外扩圆耳、纸白圆方脸、黄色圆脸颊和极简蓝色五官。衣服、耳机、鞋、相机、包和书都不是固定设定，会随每张图的语义重新设计。Skill 内置 2 张身份锚点和 14 张完成度校准图，并明确禁止把这些图片当作服装或构图模板。
+
+安装：
+
+```bash
+git clone https://github.com/AndersonHJB/CodexSkills.git
+mkdir -p ~/.codex/skills/bornforthis-illustrations
+rsync -a --delete CodexSkills/skills/bornforthis-illustrations/ ~/.codex/skills/bornforthis-illustrations/
+```
+
+安装后新建 Codex 会话，并发送：
+
+```text
+使用 $bornforthis-illustrations，为这篇中文文章设计并生成 Bornforthis 蜡笔手绘正文配图。服装与配饰根据每张图的主题变化，不要默认添加耳机。
+```
+
+完整说明、参考图机制和更多调用示例见 [`skills/bornforthis-illustrations/README.md`](skills/bornforthis-illustrations/README.md)。
 
 ## 微信聊天截图转小红书 Skill
 

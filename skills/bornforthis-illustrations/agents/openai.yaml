@@ -1,0 +1,6 @@
+interface:
+  display_name: "Bornforthis 正文配图"
+  short_description: "为中文内容生成 Bornforthis IP 蜡笔手绘正文配图"
+  default_prompt: "Use $bornforthis-illustrations to 为这篇中文文章设计并生成 Bornforthis 蜡笔手绘正文配图。"
+policy:
+  allow_implicit_invocation: true
