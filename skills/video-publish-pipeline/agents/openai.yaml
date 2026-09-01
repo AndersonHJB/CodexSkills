@@ -1,4 +1,4 @@
 interface:
   display_name: "视频全流程发布包"
-  short_description: "固定剪辑样式与纸张拼贴三比例封面的一站式发布包"
-  default_prompt: "使用 $video-publish-pipeline 按固定视频预设处理这个视频，并依据当前内容生成同一纸张拼贴风格的三比例封面。"
+  short_description: "给一个视频，交付固定剪辑、三比例封面与五平台发布素材"
+  default_prompt: "使用 $video-publish-pipeline 完整处理这个视频，交付固定样式成片、中英字幕、三比例封面、五平台高点击潜力发布 Markdown 与全部质检报告。"

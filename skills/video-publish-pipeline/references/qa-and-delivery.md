@@ -14,6 +14,7 @@ videos/<stem>/                               # editable project and evidence
   frames/                                    # review frames/contact sheets
   work/                                      # drafts and rejected variants
   video-qa.json                              # provisional master-only full check
+  publishing-qa.json                         # five-platform Markdown structure/evidence check
   qa-report.json
 <stem>-居中双语字幕-左上章节-置底进度条-<source-resolution>.mp4 # verified master
 封面/
@@ -28,7 +29,7 @@ Use `4K` only when the source is actually a 4K raster; otherwise use an honest l
 
 ## Automated checks
 
-Run `scripts/validate_captions.py` on the three SRTs. After the master render, run `scripts/media_qa.py --full --fail-on-unexpected-black` with only source and master and save `video-qa.json`. After covers and Markdown exist, run it again with `--full --fail-on-unexpected-black`, all three covers, the publishing Markdown, and `qa-report.json`. The second run is the final whole-package gate. If an intentional new black transition exists, omit the fail flag only after visual confirmation and record the exception.
+Run `scripts/validate_captions.py --identity-manifest source/opening-identity.json` on the three SRTs; absence, ambiguity, or mismatch in the identity manifest is a hard failure. After the master render, run `scripts/media_qa.py --full --fail-on-unexpected-black` with only source and master and save `video-qa.json`. After the five-platform Markdown exists, run `scripts/validate_publishing.py` and save `publishing-qa.json`. After covers and validated Markdown exist, run `scripts/media_qa.py` again with `--full --fail-on-unexpected-black`, all three covers, the publishing Markdown, and `qa-report.json`. The second media run is the final whole-package gate. If an intentional new black transition exists, omit the fail flag only after visual confirmation and record the exception.
 
 Required media checks:
 
@@ -84,6 +85,8 @@ After encoding, extract a separate bottom-overlay contact sheet and repeat the c
 
 ## Caption checks
 
+- The delivery report records `opening_identity_status`, approved Chinese spelling, approved English/romanized spelling when present, confirmation source, and affected cue ID. The manifest status must be `confirmed` or `not_present`; a present identity may never remain inferred, pending, or ambiguous at delivery.
+- The first self-introduction matches that approved identity in the corrected transcript, cue data, Chinese SRT, English SRT, bilingual SRT, composition data, rendered frame, cover copy, and publishing copy wherever the identity appears. Raw ASR evidence remains byte-for-byte unchanged.
 - Chinese, English, and bilingual files have identical cue IDs and times.
 - No overlap, negative duration, blank cue, cross-chapter cue, or unreviewed high reading speed remains.
 - Chinese is visually primary; English is concise and secondary.
@@ -100,12 +103,16 @@ After encoding, extract a separate bottom-overlay contact sheet and repeat the c
 - A preserved cover whose wording or visual claim conflicts with the current fact matrix requires an explicit recorded user decision before it can enter the final package.
 - Unrequested privacy blur, blanking, masking, crop, or replacement is a hard failure in every cover mode.
 - The Markdown contains all five platforms, stable final paths, accurate chapters, platform-native fields, current source links, and no unsupported claim.
+- The Markdown records a current research date, separates official rules from creative inferences, identifies observed search phrases/hooks/tag clusters, and cites direct links to accessible market examples.
+- Every platform section includes one recommended title, four or five distinct A/B titles, a recommendation rationale, exact cover mapping, ready-to-paste native copy, relevant tags, a first/pinned comment, and publishing reminders.
+- Bilibili and YouTube include verified chapters. YouTube public hashtags and backend tags are separate.
+- `publishing-qa.json` passes with no hard failure. “保证爆款”, “必爆”, “100%成功”, “全网最强”, and similar unsupported promises are hard failures; “高点击潜力” is allowed when framed as a testable candidate rather than an outcome.
 
 ## Final handoff
 
 Do not report completion while a required artifact or hard gate is missing. The final response must be self-contained and include:
 
-- clickable absolute paths to the master, three SRTs, three covers, publishing Markdown, QA report, delivery manifest, and editable project;
+- clickable absolute paths to the master, three SRTs, three covers, publishing Markdown, publishing QA report, whole-package QA report, delivery manifest, and editable project;
 - inline previews of all three covers;
 - a short measured summary of source versus output dimensions, frame rate, duration, audio, color, decode status, subtitle cue count, and cover dimensions;
 - any intentional deviation or remaining non-blocking caveat.

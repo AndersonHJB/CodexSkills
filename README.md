@@ -17,7 +17,7 @@ https://github.com/AndersonHJB/CodexSkills
 - `build-wechat-sticker-pack`：从一张或多张参考图片，全流程生成 20 张独立 Q 版微信表情、发布横幅/封面/聊天图标、填写文案、含义词、QA 报告、原图归档及双压缩包。
 - `cola-voice-delivery`：使用 ListenHub 将文本或播客转成晓曼与 Cola 两种中文女生声，按输入长度动态分段，交付每个片段和两种音声的完整拼接 MP3。
 - `bornforthis-illustrations`：为中文文章生成与 Esther／不二插画相同蜡笔绘本视觉体系的 Bornforthis 16:9 正文配图；内置 2 张身份锚点与 14 张完成度样例，固定短蓝碎发、外扩圆耳、纸白圆方脸和黄色圆脸颊身份，服装、耳机等配饰随场景变化。安装与使用见 [`skills/bornforthis-illustrations/README.md`](skills/bornforthis-illustrations/README.md)。
-- `video-publish-pipeline`：将一个视频处理成可核验的五平台发布包，固定使用居中中英字幕、最左上章节卡和置底分段进度条；封面默认根据当前视频内容独立创作 16:9、3:4、4:3 三种构图，并锁定暖纸张、深墨标题、黄蓝手绘强调、真实证据卡片和小型人物信任锚点的视觉体系，不随机换风格。
+- `video-publish-pipeline`：给一个视频即可交付可核验的完整五平台发布包：先确认开场姓名/品牌，再制作居中中英字幕、最左上章节卡、置底分段进度条与源规格成片；封面按当前内容独立创作 16:9、3:4、4:3 三种构图并锁定暖纸张拼贴视觉；同时联网研究同题市场，输出微信视频号、哔哩哔哩、小红书、抖音、YouTube 的推荐标题、A/B 标题、原生文案、标签、章节、置顶评论、封面映射和来源齐全的 Markdown，并分别完成发布素材与整包 QA。
 
 ## 个人 IP 角色批量生成 Skill
 

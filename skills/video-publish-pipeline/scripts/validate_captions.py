@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate aligned Chinese, English, and bilingual SRT deliverables."""
+"""Validate an opening-identity gate and aligned bilingual SRT deliverables."""
 
 from __future__ import annotations
 
@@ -71,6 +71,7 @@ def main() -> int:
     parser.add_argument("--zh", required=True, type=Path)
     parser.add_argument("--en", required=True, type=Path)
     parser.add_argument("--bilingual", required=True, type=Path)
+    parser.add_argument("--identity-manifest", required=True, type=Path)
     parser.add_argument("--json-out", type=Path)
     parser.add_argument("--time-tolerance-ms", type=int, default=0)
     parser.add_argument("--min-duration", type=float, default=1.0)
@@ -95,6 +96,18 @@ def main() -> int:
             parser.error("--json-out must not overwrite a caption input")
 
     issues: list[dict[str, object]] = []
+    identity_manifest: dict[str, object] | None = None
+    if not args.identity_manifest.is_file():
+        issues.append(issue("error", "identity_manifest_missing", f"identity manifest not found: {args.identity_manifest}"))
+    else:
+        try:
+            loaded_manifest = json.loads(args.identity_manifest.read_text(encoding="utf-8"))
+            if not isinstance(loaded_manifest, dict):
+                raise ValueError("identity manifest root must be an object")
+            identity_manifest = loaded_manifest
+        except (OSError, UnicodeError, json.JSONDecodeError, ValueError) as exc:
+            issues.append(issue("error", "identity_manifest_parse", f"{args.identity_manifest}: {exc}"))
+
     parsed: dict[str, list[Cue]] = {}
     for label, path in (("zh", args.zh), ("en", args.en), ("bilingual", args.bilingual)):
         if not path.is_file():
@@ -113,6 +126,55 @@ def main() -> int:
         issues.append(issue("error", "empty_track", f"caption tracks must be non-empty: {counts}"))
     if len(set(counts.values())) != 1:
         issues.append(issue("error", "cue_count", f"cue counts differ: {counts}"))
+
+    identity_summary: dict[str, object] = {
+        "path": str(args.identity_manifest.resolve()),
+        "status": None,
+    }
+    if identity_manifest is not None:
+        status = identity_manifest.get("opening_identity_status")
+        identity_summary["status"] = status
+        if status not in {"confirmed", "not_present"}:
+            issues.append(issue("error", "identity_status", "opening_identity_status must be confirmed or not_present"))
+        elif status == "confirmed":
+            required_fields = (
+                "approved_chinese",
+                "approved_english_or_romanized",
+                "confirmation_source",
+                "cue_id",
+                "approved_zh_subtitle",
+                "approved_en_subtitle",
+            )
+            missing_fields = [name for name in required_fields if identity_manifest.get(name) in (None, "")]
+            for name in missing_fields:
+                issues.append(issue("error", "identity_field", f"confirmed identity is missing {name}"))
+
+            cue_id = identity_manifest.get("cue_id")
+            approved_zh = identity_manifest.get("approved_zh_subtitle")
+            approved_en = identity_manifest.get("approved_en_subtitle")
+            identity_summary.update({
+                "cue_id": cue_id,
+                "approved_chinese": identity_manifest.get("approved_chinese"),
+                "approved_english_or_romanized": identity_manifest.get("approved_english_or_romanized"),
+                "confirmation_source": identity_manifest.get("confirmation_source"),
+                "approved_zh_subtitle": approved_zh,
+                "approved_en_subtitle": approved_en,
+            })
+            if not isinstance(cue_id, int) or cue_id < 1:
+                issues.append(issue("error", "identity_cue_id", "confirmed identity cue_id must be a positive integer"))
+            elif cue_id > min(len(zh), len(en), len(bi)):
+                issues.append(issue("error", "identity_cue_missing", f"identity cue {cue_id} is absent from one or more tracks", cue_id))
+            elif isinstance(approved_zh, str) and isinstance(approved_en, str):
+                zh_cue = zh[cue_id - 1]
+                en_cue = en[cue_id - 1]
+                bi_cue = bi[cue_id - 1]
+                if zh_cue.index != cue_id or zh_cue.text.strip() != approved_zh.strip():
+                    issues.append(issue("error", "identity_zh_mismatch", "Chinese identity cue does not match the approved manifest text", cue_id))
+                if en_cue.index != cue_id or en_cue.text.strip() != approved_en.strip():
+                    issues.append(issue("error", "identity_en_mismatch", "English identity cue does not match the approved manifest text", cue_id))
+                expected_bilingual = f"{approved_zh.strip()}\n{approved_en.strip()}"
+                if bi_cue.index != cue_id or bi_cue.text.strip() != expected_bilingual:
+                    issues.append(issue("error", "identity_bilingual_mismatch", "Bilingual identity cue does not exactly match the approved manifest text", cue_id))
 
     zh_text = " ".join(cue.text for cue in zh)
     en_text = " ".join(cue.text for cue in en)
@@ -171,6 +233,7 @@ def main() -> int:
     report = {
         "status": "pass" if not errors else "fail",
         "files": {"zh": str(args.zh.resolve()), "en": str(args.en.resolve()), "bilingual": str(args.bilingual.resolve())},
+        "opening_identity": identity_summary,
         "cue_counts": counts,
         "error_count": len(errors),
         "warning_count": len(warnings),

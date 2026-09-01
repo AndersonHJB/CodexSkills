@@ -31,13 +31,21 @@ Gate: no invented feature, result, discount, credential, link, or capability rem
 ## C. Transcript, chapters, and bilingual captions
 
 1. Prefer an existing timed transcript when it is reliable; otherwise run the best available ASR on the original audio.
-2. Repair Chinese semantics and names before translation. Listen again around low-confidence words, brands, versions, product terms, and code/English terms.
-3. Segment by meaning and visual action. Do not let a cue cross a scene, chapter, or speaker change.
-4. Lock the Chinese timing, then write concise natural English against the same cue IDs and times.
-5. Export three artifacts: Chinese SRT, English SRT, and bilingual SRT.
-6. Run `scripts/validate_captions.py` and repair all hard failures. Review reading-speed warnings manually.
+2. Run the opening-identity confirmation gate before any translation or composition work:
+   - isolate and review at least the first 15 seconds, including any “你好，我是…” or equivalent self-introduction;
+   - compare the heard name with explicit user wording, creator/profile metadata, prior approved spellings, visible account/brand text, and reliable project evidence;
+   - treat an explicit user-provided spelling or correction as authoritative and already confirmed;
+   - otherwise, if an opening identity is present, show one concise confirmation prompt containing the candidate Chinese opening cue and its English/romanized version, then wait for the user before proceeding; do this even when ASR confidence is high;
+   - if no opening self-introduction or identity is present, record `opening_identity_status: not_present` and continue without asking;
+   - write `source/opening-identity.json` with `opening_identity_status`, approved Chinese spelling, approved English/romanized spelling when used, confirmation source, affected cue ID, and the exact approved Chinese and English cue text;
+   - keep raw ASR outputs unchanged and apply the approved spelling only to corrected transcripts, cue data, SRT files, composition data, covers, and publishing copy.
+3. Repair Chinese semantics, names, brands, versions, product terms, and code/English terms before translation. Listen again around every low-confidence or identity-critical word.
+4. Segment by meaning and visual action. Do not let a cue cross a scene, chapter, or speaker change.
+5. Lock the Chinese timing, then write concise natural English against the same cue IDs and times.
+6. Export three artifacts: Chinese SRT, English SRT, and bilingual SRT.
+7. Run `scripts/validate_captions.py --identity-manifest source/opening-identity.json` and repair all hard failures. Review reading-speed warnings manually.
 
-Gate: equal cue identity and timing across languages, no overlap or empty cue, no broken terminology, and no caption that hides a critical action.
+Gate: `opening_identity_status` is `confirmed` or `not_present`; a confirmed identity is identical across every derived artifact; cue identity and timing match across languages; no overlap, empty cue, broken terminology, or caption hiding a critical action remains.
 
 ## D. Composition and review render
 
@@ -62,9 +70,10 @@ Gate: no decode error, no unexplained duration drift beyond roughly one source f
 ## F. Covers, platform package, and handoff
 
 1. Produce covers only after `cover_mode`, the fact matrix, and usable source frames are ready. In `house-creative`, use the approved cover preset and current evidence; in preservation modes, change only what the user authorized.
-2. Generate platform copy only after final filenames and chapter timestamps are stable.
-3. Re-run `scripts/media_qa.py --full --fail-on-unexpected-black` with the same unchanged master, all three covers, and the publishing Markdown. Save this whole-package result as `qa-report.json`.
-4. Verify all final files, write the delivery report, and keep failed variants outside the final delivery locations.
-5. Return absolute clickable file paths and show the three cover images inline.
+2. Generate platform copy only after final filenames and chapter timestamps are stable. Browse current official guidance and current same-topic/same-format examples, record the research date and direct links, then derive high-click-potential titles, native copy, tag clusters, comments, and chapters without promising virality.
+3. Run `scripts/validate_publishing.py <markdown> --json-out <project>/publishing-qa.json` and fix every hard failure.
+4. Re-run `scripts/media_qa.py --full --fail-on-unexpected-black` with the same unchanged master, all three covers, and the validated publishing Markdown. Save this whole-package result as `qa-report.json`.
+5. Verify all final files, write the delivery report, and keep failed variants outside the final delivery locations.
+6. Return absolute clickable file paths and show the three cover images inline.
 
-Gate: the final package contains the master video, three SRTs, three exact-size covers, five-platform Markdown, QA report, and retained editable project.
+Gate: the final package contains the master video, three SRTs, three exact-size covers, a market-researched five-platform Markdown, publishing QA report, whole-package QA report, and retained editable project. “Video complete” alone is not full-pipeline completion.
