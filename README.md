@@ -10,6 +10,7 @@ https://github.com/AndersonHJB/CodexSkills
 
 ## Skills 列表
 
+- `blindbox-ip-skill-4styles`：将个人或品牌描述转化为可复用的内容配图角色，提供治愈绘本手绘、极简符号卡通、盲盒潮玩公仔和日常扁平漫画四种画风；交付角色价值观、视觉 DNA、正面图、三视图、角色参考板、分层提示词和一致性测试图。使用说明见 [`skills/blindbox-ip-skill-4styles/README.md`](skills/blindbox-ip-skill-4styles/README.md)，授权范围见该目录下的 `LICENSE`。
 - `generate-personal-ip-avatars`：为零基础用户打造可配置个人 IP 盲盒；支持随机与浅色主题、8 张行业全身形象、官方高校/机构 VI 配色扩展、动作、八角度、24 种情绪、总拼图和离线 HTML 选择画廊。没有明确功能控制时默认全部开启。
 - `wechat-article-pipeline`：微信公众号文章流水线，支持文章重写、吸金标题与摘要、教程插图、公众号封面、图片上传 PicGoImage、Markdown 图片链接替换、文章归档、公众号可复制 HTML 排版。
 - `xiaohongshu-post-imagegen`：小红书帖子图生成工作流，支持按主题生成多张轮播插图、图片内中文文案、整帖统一发布文案、标题备选、互动引导和标签组合。
