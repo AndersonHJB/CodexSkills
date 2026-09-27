@@ -1,0 +1,4 @@
+interface:
+  display_name: "视频平台发布物料"
+  short_description: "参考同类优质封面风格并生成五个平台发布封面文案标签"
+  default_prompt: "Use $video-platform-publishing to research comparable cover styles and generate covers, titles, descriptions, tags, and pinned comments for my video."
