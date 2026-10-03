@@ -1,0 +1,4 @@
+interface:
+  display_name: "AI 短剧制作包"
+  short_description: "把剧本一次性做成角色多视图、场景、音色、21:9 分镜的完整 AI 视频生产包"
+  default_prompt: "Use $short-drama-pack to turn my script into a complete AI drama production pack: character multi-view prompts, scene prompts, scene relations, voice descriptions, a 21:9 storyboard in my video platform's format, and an HTML viewer."

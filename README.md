@@ -20,6 +20,14 @@ https://github.com/AndersonHJB/CodexSkills
 - `bornforthis-illustrations`：为中文文章生成与 Esther／不二插画相同蜡笔绘本视觉体系的 Bornforthis 16:9 正文配图；内置 2 张身份锚点与 14 张完成度样例，固定短蓝碎发、外扩圆耳、纸白圆方脸和黄色圆脸颊身份，服装、耳机等配饰随场景变化。安装与使用见 [`skills/bornforthis-illustrations/README.md`](skills/bornforthis-illustrations/README.md)。
 - `video-publish-pipeline`：给一个视频即可交付可核验的完整五平台发布包：先确认开场姓名/品牌，再制作居中中英字幕、最左上章节卡、置底分段进度条与源规格成片；封面按当前内容独立创作 16:9、3:4、4:3 三种构图并锁定暖纸张拼贴视觉；同时联网研究同题市场，输出微信视频号、哔哩哔哩、小红书、抖音、YouTube 的推荐标题、A/B 标题、原生文案、标签、章节、置顶评论、封面映射和来源齐全的 Markdown，并分别完成发布素材与整包 QA。
 - `video-platform-publishing`：参考同题与同形式视频的市场表现和封面规律，为微信视频号、抖音、哔哩哔哩、YouTube、小红书生成平台适配的封面、标题、正文、标签、置顶评论和发布提醒；支持单独使用，也供 `video-publish-pipeline` 调用。工作流见 [`skills/video-platform-publishing/SKILL.md`](skills/video-platform-publishing/SKILL.md)。
+- `short-drama-pack`：给一个剧本，一次性交付 AI 短剧的全部文字物料，每样都是独立文件。默认国漫 3D 半写实、电影宽银幕 21:9。内容包括：
+  - 角色多视图提示词、道具图。
+  - 可交给出图 AI 按编号批量生成的场景提示词，以及场景分组与父子关联表。
+  - 角色音色与逐句表演指令。
+  - 按视频平台「片段 → 分镜」格式写好的分镜脚本、后期清单。
+  - 一键复制的离线 HTML 查看页。
+
+  所有内容出自同一份数据，渲染时自动核对引用名、台词覆盖、时长和连续性。使用说明见 [`skills/short-drama-pack/README.md`](skills/short-drama-pack/README.md)。
 
 ## 个人 IP 角色批量生成 Skill
 
@@ -181,6 +189,27 @@ archives/*-full-archive.zip   原图与完整生产资料
 ```
 
 也可以直接附带文本内容。长文本会按章节或自然段动态拆分；如果 ListenHub 的输入接口要求 HTML，Skill 会准备 HTML 备用输入，失败时回退到逐段直接文本生成。
+
+## AI 短剧制作包 Skill
+
+`short-drama-pack` 把一个剧本一次性做成 AI 视频生产包：角色、道具、场景、场景关联、音色、分镜、后期，各一个独立文件，外加一个离线 HTML 查看页。分镜按视频平台的「片段 → 分镜」格式输出，每个片段不超过 30 秒、最多 5 个分镜，片段可以整段粘贴。
+
+安装：
+
+```bash
+git clone https://github.com/AndersonHJB/CodexSkills.git
+mkdir -p ~/.codex/skills/short-drama-pack
+rsync -a --delete CodexSkills/skills/short-drama-pack/ ~/.codex/skills/short-drama-pack/
+```
+
+安装后新建 Codex 会话，并发送：
+
+```text
+使用 $short-drama-pack，把这个剧本做成完整的制作包：/path/to/剧本.txt
+风格用国漫3D半写实，画幅 21:9。
+```
+
+只需要 Python 3，没有第三方依赖。交付文件、校验项和修改方法见 [`skills/short-drama-pack/README.md`](skills/short-drama-pack/README.md)。
 
 ## 目录结构
 
